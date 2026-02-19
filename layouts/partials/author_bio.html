@@ -1,0 +1,41 @@
+<!-- Author Bio Component -->
+<div class="author-bio">
+    <div class="author-bio-content">
+        <div class="author-info">
+            <h3 class="author-name">{{ .Site.Params.author | default "Jason Albert" }}</h3>
+            <p class="author-description">
+                {{ with .Site.Params.authorBio }}
+                    {{ . }}
+                {{ else }}
+                    Writing about fatherhood, artificial intelligence, and the questions worth asking.
+                    Pattern recognition, one post at a time.
+                {{ end }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+.author-bio {
+    margin: 4em 0 3em;
+    padding: 2em;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.author-name {
+    font-family: var(--font-sans);
+    font-size: 1.25em;
+    font-weight: 700;
+    margin: 0 0 0.75em 0;
+    color: var(--primary);
+}
+
+.author-description {
+    color: var(--secondary);
+    line-height: 1.6;
+    margin: 0;
+    font-family: var(--font-sans);
+}
+</style>

@@ -1,6 +1,6 @@
-baseURL = 'https://yourusername.github.io/unsupervisedlearning/'
+baseURL = 'https://yourusername.github.io/unsupervisedleap/'
 languageCode = 'en-us'
-title = 'Unsupervised Learning'
+title = 'Unsupervised Leap'
 theme = 'PaperMod'
 paginate = 10
 enableRobotsTXT = true
@@ -11,6 +11,7 @@ buildFuture = false
   defaultTheme = 'dark'
   description = "A blog about fatherhood, artificial intelligence, and the questions worth asking."
   author = "Jason Albert"
+  authorBio = "Writing about fatherhood, artificial intelligence, and the questions worth asking. Pattern recognition, one post at a time."
   ShowReadingTime = true
   ShowShareButtons = false
   ShowPostNavLinks = true
@@ -29,7 +30,7 @@ buildFuture = false
   [params.homeInfoParams]
     Title = "No labels. No loss function."
     Content = """
-Welcome to **Unsupervised Learning** — dispatches from the unstructured space \
+Welcome to **Unsupervised Leap** — dispatches from the unstructured space \
 between being a dad, thinking about AI, and wondering what any of it means. \
 No supervised training here. Just pattern recognition, one post at a time.
 """

@@ -16,14 +16,14 @@ None of it prepared me for the specific texture of 3 a.m. The silence that is ne
 
 ## What the Model Gets Wrong
 
-In machine learning, you train on historical data, tune your parameters, and deploy. Fatherhood runs the opposite process: the environment keeps changing, the labels shift, and the model you spent six months building becomes deprecated the moment your kid learns to say *no*.
+In machine leap, you train on historical data, tune your parameters, and deploy. Fatherhood runs the opposite process: the environment keeps changing, the labels shift, and the model you spent six months building becomes deprecated the moment your kid learns to say *no*.
 
 Every developmental stage is a distribution shift. Toddler-you was trained on infant-them. Now there's a three-year-old in your house and your priors are garbage.
 
-## What I'm Learning Anyway
+## What I'm Leap Anyway
 
 The thing nobody tells you — or maybe they do and you can't hear it until you're in it — is that the uncertainty is the point. You're not solving for a single correct answer. You're building a relationship, which is just another word for a system that adapts.
 
-I'm learning to be comfortable not knowing. Which, it turns out, is the most important thing I can model for the kid watching me.
+I'm leap to be comfortable not knowing. Which, it turns out, is the most important thing I can model for the kid watching me.
 
 No labels. No loss function. Just showing up.
