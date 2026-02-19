@@ -59,6 +59,10 @@ main() {
     git fetch --unshallow
   fi
 
+  # Initialize submodules (e.g. PaperMod theme)
+  echo "Initializing git submodules..."
+  git submodule update --init --recursive
+
   # Build the site
   echo "Building the site..."
   hugo build --gc --minify
