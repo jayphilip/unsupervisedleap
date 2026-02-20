@@ -1,8 +1,9 @@
 const ALLOWED_ORIGIN = 'https://unsupervisedleap.com';
 const KIT_FORM_ID = '9113458';
-const KIT_SUBSCRIBE_ENDPOINT = `https://api.kit.com/v4/forms/${KIT_FORM_ID}/subscribers`;
-const KIT_BROADCAST_ENDPOINT = 'https://api.kit.com/v4/broadcasts';
+const KIT_API_BASE = 'https://api.kit.com/v4';
+const KIT_BROADCAST_ENDPOINT = `${KIT_API_BASE}/broadcasts`;
 const RSS_URL = 'https://unsupervisedleap.com/rss.xml';
+
 const KV_LAST_KEY = 'last_sent_url';
 
 const CORS_HEADERS = {
@@ -144,22 +145,32 @@ export default {
       return json({ error: 'A valid email address is required.' }, 400);
     }
 
-    const kitRes = await fetch(KIT_SUBSCRIBE_ENDPOINT, {
+    const kitHeaders = {
+      'Content-Type': 'application/json',
+      'X-Kit-Api-Key': env.KIT_API_KEY,
+    };
+
+    // Step 1: create subscriber
+    const createRes = await fetch(`${KIT_API_BASE}/subscribers`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Kit-Api-Key': env.KIT_API_KEY,
-      },
+      headers: kitHeaders,
       body: JSON.stringify({ email_address: email }),
     });
 
-    if (kitRes.ok) return json({ success: true });
+    if (!createRes.ok) {
+      const d = await createRes.json().catch(() => ({}));
+      return json({ error: d?.errors?.[0] ?? 'Subscription failed. Please try again.' }, createRes.status);
+    }
 
-    const kitData = await kitRes.json().catch(() => ({}));
-    return json(
-      { error: kitData?.errors?.[0] ?? 'Subscription failed. Please try again.' },
-      kitRes.status,
-    );
+    const { subscriber } = await createRes.json();
+
+    // Step 2: add to form
+    await fetch(`${KIT_API_BASE}/forms/${KIT_FORM_ID}/subscribers/${subscriber.id}`, {
+      method: 'POST',
+      headers: kitHeaders,
+    });
+
+    return json({ success: true });
   },
 
   // ── Cron handler: RSS → Kit broadcast ───────────────────────────────────────
