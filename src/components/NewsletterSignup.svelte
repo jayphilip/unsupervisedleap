@@ -1,7 +1,7 @@
 <script lang="ts">
   type Status = 'idle' | 'loading' | 'success' | 'error';
 
-  const FORM_ID = '718c6e097b';
+  const FORM_ID = '9113458';
   const ENDPOINT = `https://app.kit.com/forms/${FORM_ID}/subscriptions`;
 
   // card=true → standalone card with headline (homepage)
@@ -26,7 +26,7 @@
         body: JSON.stringify({ email_address: email }),
       });
 
-      if (res.ok) {
+      if (res.ok || res.redirected) {
         status = 'success';
         email = '';
       } else {
