@@ -2,6 +2,17 @@ name = "unsupervisedleap-subscribe"
 main = "index.js"
 compatibility_date = "2025-07-31"
 
-# KIT_API_KEY is set as a secret via:
-#   cd worker && npx wrangler secret put KIT_API_KEY
-# Never put the key in this file.
+# Run RSS check every day at 9am UTC
+[triggers]
+crons = ["0 9 * * *"]
+
+# KV namespace for storing last-sent post URL
+# Created via: cd worker && npx wrangler kv namespace create RSS_KV
+# Then paste the returned id below
+[[kv_namespaces]]
+binding = "RSS_KV"
+id = "e52a09dcfd914f7a8194d01258802cbf"
+
+# Secrets set via wrangler (never put values here):
+#   npx wrangler secret put KIT_API_KEY
+#   npx wrangler secret put SENDER_EMAIL   ← your confirmed Kit sender email
