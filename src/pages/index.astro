@@ -33,7 +33,6 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
           RSS
         </a>
       </div>
-      <NewsletterSignup client:load />
     </div>
   </section>
 
@@ -134,4 +133,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
       );
     })}
   </section>
+
+  <NewsletterSignup client:load card={true} />
+
 </BaseLayout>
