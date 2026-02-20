@@ -1,8 +1,9 @@
 <script lang="ts">
   type Status = 'idle' | 'loading' | 'success' | 'error';
 
-  const FORM_ID = '9113458';
-  const ENDPOINT = `https://app.kit.com/forms/${FORM_ID}/subscriptions`;
+  const ENDPOINT =
+    import.meta.env.PUBLIC_SUBSCRIBE_URL ??
+    'https://unsupervisedleap-subscribe.jason-p-albert.workers.dev';
 
   // card=true → standalone card with headline (homepage)
   // card=false (default) → compact embedded version (post footer)
@@ -26,7 +27,7 @@
         body: JSON.stringify({ email_address: email }),
       });
 
-      if (res.ok || res.redirected) {
+      if (res.ok) {
         status = 'success';
         email = '';
       } else {

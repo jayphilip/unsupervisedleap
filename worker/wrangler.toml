@@ -1,0 +1,7 @@
+name = "unsupervisedleap-subscribe"
+main = "index.js"
+compatibility_date = "2025-07-31"
+
+# KIT_API_KEY is set as a secret via:
+#   cd worker && npx wrangler secret put KIT_API_KEY
+# Never put the key in this file.

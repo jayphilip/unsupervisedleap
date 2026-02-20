@@ -16,3 +16,6 @@ Thumbs.db
 
 # Environment
 .env
+
+# Worker local dev state
+worker/.wrangler/
