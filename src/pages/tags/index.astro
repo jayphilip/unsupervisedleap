@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+// Build a map of normalised tag → count
+const tagCounts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags ?? []) {
+    const key = tag.toLowerCase().replace(/ /g, '-');
+    tagCounts.set(key, (tagCounts.get(key) ?? 0) + 1);
+  }
+}
+
+const tags = [...tagCounts.entries()].sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title="Tags" description="Browse all tags on Unsupervised Leap.">
+  <div class="page-header">
+    <h1>Tags</h1>
+    <p>{tags.length} tag{tags.length !== 1 ? 's' : ''}</p>
+  </div>
+
+  <div class="tags-list">
+    {tags.map(([tag, count]) => (
+      <a href={`/tags/${tag}/`} class="tag-item">
+        {tag}
+        <span class="tag-count">{count}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

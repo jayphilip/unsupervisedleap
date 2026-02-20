@@ -1,0 +1,75 @@
+---
+title: "MDX + Svelte: Writing With Live Components"
+date: 2026-02-20
+draft: false
+tags: ["AI", "language-models", "philosophy"]
+categories: ["AI"]
+description: "This post is written in MDX and embeds interactive Svelte components directly in the prose — a demonstration of what's now possible."
+showToc: true
+---
+
+import CalloutBox from '../../components/CalloutBox.svelte';
+
+This post is written in **MDX** — a format that combines standard Markdown with the ability to import and render interactive components directly in your prose. Everything you write flows as normal Markdown. But when you need more, you reach for a component.
+
+<CalloutBox type="info" title="What you're looking at" client:load>
+  This callout is a **Svelte component** rendered inside a Markdown post. It was imported at the top of this MDX file and dropped into the flow of the text like any other element. No iframes. No workarounds. Just composition.
+</CalloutBox>
+
+## Why this matters
+
+Until now, this blog ran on Hugo — a fast static site generator with excellent Markdown support. But Hugo's templating system lives entirely outside your content. If you want something dynamic in a post, you reach for raw HTML and inline `<script>` tags, which is fragile and difficult to maintain.
+
+With Astro + MDX, the boundary between *content* and *component* dissolves. You write prose. You import a component where the prose needs to do more than prose can do. You keep going.
+
+<CalloutBox type="note" title="The mental model" client:load>
+  Think of MDX as Markdown that graduated. It still does everything Markdown does — headings, links, code blocks, emphasis. It just also knows how to speak JavaScript.
+</CalloutBox>
+
+## What MDX unlocks
+
+Here's what becomes straightforward with this setup:
+
+- **Interactive diagrams** embedded mid-post alongside the text that explains them
+- **Collapsible callout boxes** (like the ones in this post) for asides that shouldn't break reading flow
+- **Live code sandboxes** — drop a component that lets readers edit and run code without leaving the page
+- **Data visualizations** that update based on reader input
+- **Pull quotes** with semantic markup and custom styling
+
+The key insight: these aren't widgets bolted onto a page after the fact. They're *part of the writing*.
+
+<CalloutBox type="warning" title="With great power..." client:load>
+  Just because you *can* embed a Svelte component in every paragraph doesn't mean you should. Good writing is still good writing. Use components where interactivity earns its keep.
+</CalloutBox>
+
+## The architecture
+
+This blog now runs on three tools working together:
+
+1. **Astro** — the framework. It handles routing, static site generation, and the integration layer. At build time, it renders everything to static HTML. Client-side hydration only happens where you explicitly opt in with a `client:*` directive.
+
+2. **Svelte** — the component language. Svelte compiles components to minimal vanilla JavaScript with no runtime overhead. It's a natural fit for a content site that wants interactivity without bloat.
+
+3. **Vite** — the build tool. Astro uses Vite under the hood, which means fast dev server HMR, efficient bundling, and first-class support for modern JavaScript.
+
+## How to add a Svelte component to your own posts
+
+1. Create a `.svelte` file in `src/components/`
+2. Import it at the top of your `.mdx` file
+3. Use it in the prose wherever it fits
+
+```mdx
+import MyComponent from '../../components/MyComponent.svelte';
+
+Here is some prose.
+
+<MyComponent client:load prop="value" />
+
+More prose continues here.
+```
+
+The `client:load` directive tells Astro to hydrate the component in the browser after the page loads. If your component is purely presentational (no interactivity), you can omit it entirely and it'll render as static HTML.
+
+---
+
+*This post exists as a working demonstration. The three callout boxes above are live Svelte components. The collapsible ones in the component source (`collapsible` prop) will toggle open and closed. Everything else is plain Markdown.*

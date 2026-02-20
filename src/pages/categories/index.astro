@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+const catCounts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const cat of post.data.categories ?? []) {
+    const key = cat.toLowerCase().replace(/ /g, '-');
+    catCounts.set(key, (catCounts.get(key) ?? 0) + 1);
+  }
+}
+
+const categories = [...catCounts.entries()].sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title="Categories" description="Browse all categories on Unsupervised Leap.">
+  <div class="page-header">
+    <h1>Categories</h1>
+    <p>{categories.length} categor{categories.length !== 1 ? 'ies' : 'y'}</p>
+  </div>
+
+  <div class="tags-list">
+    {categories.map(([cat, count]) => (
+      <a href={`/categories/${cat}/`} class="tag-item">
+        {cat}
+        <span class="tag-count">{count}</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

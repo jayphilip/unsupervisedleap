@@ -2,8 +2,8 @@ name = "hosting-cloudflare-worker"
 compatibility_date = "2025-07-31"
 
 [build]
-command = "chmod a+x build.sh && ./build.sh"
+command = "npm run build"
 
 [assets]
-directory = "./public"
+directory = "./dist"
 not_found_handling = "404-page"

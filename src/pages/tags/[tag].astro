@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+
+  const tagMap = new Map<string, typeof allPosts>();
+  for (const post of allPosts) {
+    for (const tag of post.data.tags ?? []) {
+      const key = tag.toLowerCase().replace(/ /g, '-');
+      if (!tagMap.has(key)) tagMap.set(key, []);
+      tagMap.get(key)!.push(post);
+    }
+  }
+
+  return [...tagMap.entries()].map(([tag, posts]) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`} description={`Posts tagged "${tag}" on Unsupervised Leap.`}>
+  <div class="page-header">
+    <h1>#{tag}</h1>
+    <p>{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+  </div>
+
+  {posts.map((post) => {
+    const wordCount = post.body?.split(/\s+/).length ?? 0;
+    const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+    return (
+      <PostCard
+        title={post.data.title}
+        description={post.data.description}
+        date={post.data.date}
+        slug={post.slug}
+        tags={post.data.tags}
+        readingTime={readingTime}
+      />
+    );
+  })}
+</BaseLayout>

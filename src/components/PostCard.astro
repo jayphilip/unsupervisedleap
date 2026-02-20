@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  date: Date;
+  slug: string;
+  tags?: string[];
+  readingTime?: number;
+}
+
+const { title, description, date, slug, tags = [], readingTime } = Astro.props;
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="post-entry">
+  <header class="entry-header">
+    <h2><a href={`/posts/${slug}/`}>{title}</a></h2>
+  </header>
+  {description && (
+    <div class="entry-content">
+      <p>{description}</p>
+    </div>
+  )}
+  <footer class="entry-footer">
+    <time datetime={date.toISOString()}>{formattedDate}</time>
+    {readingTime && <span>· {readingTime} min read</span>}
+    {tags.length > 0 && (
+      <div class="entry-tags">
+        {tags.map((tag) => (
+          <a
+            href={`/tags/${tag.toLowerCase().replace(/ /g, '-')}/`}
+            class="tag-chip"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )}
+  </footer>
+</article>

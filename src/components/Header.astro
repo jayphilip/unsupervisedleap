@@ -1,0 +1,17 @@
+---
+import ThemeToggle from './ThemeToggle.svelte';
+---
+
+<header class="header">
+  <nav class="nav">
+    <div class="logo">
+      <a href="/">Unsupervised Leap</a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/posts/">Posts</a></li>
+      <li><a href="/tags/">Tags</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <ThemeToggle client:load />
+  </nav>
+</header>

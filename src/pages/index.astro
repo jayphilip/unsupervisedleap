@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Unsupervised Leap">
+
+  <section class="hero">
+    <p class="hero-kicker">A blog by Jason Albert</p>
+    <h1 class="hero-title">No labels.<br/>No loss function.</h1>
+    <p class="hero-sub">
+      Fatherhood. Artificial intelligence. The questions worth asking.
+      No training data. Just pattern recognition — one post at a time.
+    </p>
+    <div class="hero-footer">
+      <hr class="hero-rule" />
+      <div class="social-icons">
+        <a href="https://github.com/jayphilip" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+        <a href="/rss.xml" aria-label="RSS Feed">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/>
+          </svg>
+          RSS
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .hero {
+      background: var(--entry);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.75em 2.5em 2.25em;
+      margin-bottom: 2.5em;
+      text-align: left;
+    }
+
+    .hero-kicker {
+      font-family: var(--font-sans);
+      font-size: 0.78em;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 0.85em;
+    }
+
+    .hero-title {
+      font-family: var(--font-sans);
+      font-size: clamp(2.5em, 5.5vw, 4em);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--primary);
+      margin: 0 0 0.55em;
+    }
+
+    .hero-sub {
+      font-family: var(--font-serif);
+      font-size: 1.15em;
+      line-height: 1.75;
+      color: var(--secondary);
+      max-width: 540px;
+      margin: 0;
+    }
+
+    .hero-footer {
+      margin-top: 2em;
+    }
+
+    .hero-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 0 1.25em;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 0.5em;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      color: var(--secondary);
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 0.85em;
+      font-weight: 500;
+      padding: 0.4em 0.85em;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 480px) {
+      .hero { padding: 2em 1.5em 1.75em; }
+      .hero-footer { flex-wrap: wrap; }
+    }
+  </style>
+
+  <section aria-label="Recent posts">
+    {posts.map((post) => {
+      const wordCount = post.body?.split(/\s+/).length ?? 0;
+      const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+      return (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          date={post.data.date}
+          slug={post.slug}
+          tags={post.data.tags}
+          readingTime={readingTime}
+        />
+      );
+    })}
+  </section>
+</BaseLayout>

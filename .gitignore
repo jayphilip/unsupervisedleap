@@ -1,7 +1,9 @@
-# Hugo build output
-public/
-resources/_gen/
-.hugo_build.lock
+# Astro build output
+dist/
+.astro/
+
+# Node
+node_modules/
 
 # OS
 .DS_Store
