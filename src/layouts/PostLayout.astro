@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import AuthorBio from '../components/AuthorBio.svelte';
+import NewsletterSignup from '../components/NewsletterSignup.svelte';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -62,6 +63,8 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
     </div>
 
     <AuthorBio />
+
+    <NewsletterSignup client:load />
 
     <footer class="post-footer">
       {tags.length > 0 && (

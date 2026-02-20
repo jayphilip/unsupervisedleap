@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import NewsletterSignup from '../components/NewsletterSignup.svelte';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts', ({ data }) => !data.draft);
@@ -32,6 +33,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
           RSS
         </a>
       </div>
+      <NewsletterSignup client:load />
     </div>
   </section>
 
