@@ -1,0 +1,141 @@
+---
+title: "What the Ramen Taught Me"
+date: 2026-02-22
+draft: true
+tags: ["food", "cooking", "reflection", "japanese"]
+categories: ["Food"]
+description: "Twelve hours of bone broth isn't a recipe. It's a practice in paying attention."
+showToc: true
+---
+
+import FoodCard from '../../components/FoodCard.svelte';
+import FoodGrid from '../../components/FoodGrid.svelte';
+import DishCard from '../../components/DishCard.svelte';
+import RecipeCard from '../../components/RecipeCard.svelte';
+import CalloutBox from '../../components/CalloutBox.svelte';
+
+<DishCard
+  name="Tonkotsu Ramen"
+  heroImage="https://picsum.photos/seed/tonkotsu-bowl/900/500"
+  description="Twelve hours of bone broth, chashu pork belly, soft-boiled soy egg, fresh alkaline noodles, bamboo shoots, and a finish of sesame oil. Worth every hour."
+  prepTime="30 min"
+  cookTime="12 hr"
+  serves={4}
+  origin="Japanese"
+  extraImages={[
+    { src: 'https://picsum.photos/seed/chashu-slice/600/800', caption: 'Chashu — soy-braised pork belly' },
+    { src: 'https://picsum.photos/seed/ramen-egg/600/400', caption: 'Marinated soft-boil egg' },
+    { src: 'https://picsum.photos/seed/tonkotsu-broth/600/700', caption: 'The broth after 12 hours' },
+    { src: 'https://picsum.photos/seed/ramen-bowl-top/600/400', caption: 'Final assembly' },
+  ]}
+/> 
+There's a specific kind of satisfaction that comes from making something that takes longer than it should.
+
+The ramen you get at a serious shop — white, opaque, almost fatty — takes between twelve and eighteen hours to make properly. The collagen from the bones has to have time to break down and emulsify into the water. There's no shortcut that produces the same result. The broth either is or it isn't.
+
+I made it last weekend. Here's what I learned.
+
+
+## The Haul
+
+I drove to Mitsuwa Marketplace on a Saturday morning. It's the kind of store that feels like visiting another country for an hour. I went in with a list and came out with more than I planned to.
+
+<FoodGrid>
+<FoodCard
+  name="Sun Noodle Fresh Ramen"
+  image="https://picsum.photos/seed/ramen-noodle/400/300"
+  price="$4.99"
+  origin="Hawaii, USA"
+  store="Mitsuwa Marketplace"
+  tags={["fresh", "thin", "alkaline", "wavy"]}
+  notes="The alkaline water (kansui) gives ramen noodles their characteristic chew and yellow tint. Don't substitute dried pasta — the chemistry is the whole point."
+/>
+
+<FoodCard
+  name="Pork Trotters"
+  image="https://picsum.photos/seed/pork-trotters/400/300"
+  price="$3.49 / lb"
+  origin="Local"
+  store="Mitsuwa Marketplace"
+  tags={["collagen", "gelatin", "bones"]}
+  notes="The secret to a broth that sets solid when cold. More gelatin than back bones alone. If you can only find back bones, it still works — just a thinner result."
+/>
+
+<FoodCard
+  name="Marukin Shio Tare"
+  image="https://picsum.photos/seed/shio-tare/400/300"
+  price="$7.99"
+  origin="Japan"
+  store="Mitsuwa Marketplace"
+  tags={["tare", "shio", "seasoning"]}
+  notes="Technically cheating — tare is what you make yourself in a real ramen kitchen. But this one is excellent, and life is finite."
+/>
+
+<FoodCard
+  name="Menma (Bamboo Shoots)"
+  image="https://picsum.photos/seed/menma-bamboo/400/300"
+  price="$3.29"
+  origin="Japan"
+  store="Mitsuwa Marketplace"
+  tags={["topping", "fermented", "umami"]}
+  notes="Pre-seasoned in soy and mirin. Just drain and pile on top. The fermented funk is the point — don't rinse it off."
+/>
+</FoodGrid>
+
+## The Process
+
+There's something meditative about a twelve-hour broth. The hard part isn't the technique — it's the waiting, and learning to read the pot instead of following the clock.
+
+<CalloutBox type="note" title="Stock vs. Broth">
+  These aren't the same thing. Stock is made from bones and is rich in gelatin — it gels when cold. Broth is made from meat and is flavorful but thin. Tonkotsu is stock, and the gelatin is the whole point.
+</CalloutBox>
+
+The tonkotsu method involves a deliberate vigorous boil — unlike French stocks, which are coaxed at a bare simmer. The agitation forces fat and collagen to emulsify, which is what makes the broth white and creamy rather than clear. You're not trying to keep it clean. You're trying to break it down until it becomes something new.
+
+## The Recipe
+
+<RecipeCard
+  client:load
+  title="Tonkotsu Ramen"
+  description="Rich, milky pork bone broth with chashu pork belly, soft-boiled eggs, and fresh alkaline noodles. A weekend project, not a weeknight one."
+  prepTime="30 min"
+  cookTime="12 hr"
+  totalTime="12.5 hr"
+  servings={4}
+  difficulty="hard"
+  ingredients={[
+    "2 lbs pork trotters",
+    "1 lb pork back bones",
+    "1 lb pork belly (for chashu)",
+    "4 portions fresh ramen noodles",
+    "4 large eggs",
+    "3 cloves garlic",
+    "1 knob fresh ginger (2 inches)",
+    "4 scallions",
+    "3 tbsp soy sauce",
+    "2 tbsp mirin",
+    "1 tbsp sake",
+    "4 tsp shio tare (or to taste)",
+    "Sesame oil, nori, corn — to finish"
+  ]}
+  steps={[
+    "Blanch the bones: place trotters and back bones in a large pot, cover with cold water. Bring to a rolling boil for 10 minutes. Drain, then rinse under cold water and scrub off any dark bits. This removes impurities that make the broth muddy.",
+    "Build the broth: return bones to the pot, cover with 4 quarts fresh cold water. Add garlic and ginger. Bring to a hard, rolling boil — don't reduce it. Keep boiling vigorously for 10–12 hours, adding water as needed to keep bones submerged. The high heat emulsifies fat into the water and turns the broth white.",
+    "Make chashu: roll pork belly tightly and tie with butcher's twine. Sear in a hot pan until browned on all sides. Transfer to a bag or container. Mix soy, mirin, and sake; pour over pork. Refrigerate overnight (or at least 3 hours). Slice thin while cold.",
+    "Soft-boil the eggs: bring water to a boil, lower eggs in gently. Cook exactly 6 minutes 30 seconds. Transfer immediately to an ice bath. Peel and marinate in leftover chashu tare for at least 2 hours.",
+    "Finish and strain the broth: after 10–12 hours, strain through a fine mesh strainer. Season with shio tare — start with 1 tsp per bowl and adjust. It should be rich, salty, and slightly sweet.",
+    "Cook the noodles: boil according to package directions (usually 1–2 minutes for fresh). Drain immediately. Never rinse ramen noodles.",
+    "Assemble: warm each bowl with hot water, then discard. Add tare to the bowl, ladle in hot broth, add noodles. Top with sliced chashu, halved egg, scallion, corn, and nori. Finish with a few drops of sesame oil."
+  ]}
+  tags={["Japanese", "pork", "noodles", "weekend project", "collagen"]}
+/>
+
+## What It Taught Me
+
+The thing about twelve-hour cooking is that it removes the illusion that you're in control.
+
+You set the conditions — the right bones, the right temperature, the right time. But then the broth does what it does. You can't hurry it. You can only keep paying attention and adjust when something looks off. The patience isn't a personality trait you bring to the process. It's what the process teaches you, whether you wanted the lesson or not.
+
+That sounds obvious, but I think most of us approach complicated things hoping there's a shortcut we just haven't found yet. The broth is a good reminder that some transformations require duration.
+
+I'll make it again in two weeks. I'll probably change a few things.

@@ -5,20 +5,36 @@ interface Props {
   date: Date;
   slug: string;
   tags?: string[];
+  categories?: string[];
   readingTime?: number;
 }
 
-const { title, description, date, slug, tags = [], readingTime } = Astro.props;
+const { title, description, date, slug, tags = [], categories = [], readingTime } = Astro.props;
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
-  month: 'long',
+  month: 'short',
   day: 'numeric',
 });
 ---
 
 <article class="post-entry">
   <header class="entry-header">
-    <h2><a href={`/posts/${slug}/`}>{title}</a></h2>
+    {categories.length > 0 && (
+      <p class="entry-eyebrow">
+        {categories.map((cat, i) => (
+          <>
+            <a href={`/categories/${cat.toLowerCase().replace(/ /g, '-')}/`}>{cat}</a>
+            {i < categories.length - 1 && <span class="eyebrow-sep"> · </span>}
+          </>
+        ))}
+      </p>
+    )}
+    <h2>
+      <a href={`/posts/${slug}/`}>
+        {title}
+        <span class="entry-arrow" aria-hidden="true">→</span>
+      </a>
+    </h2>
   </header>
   {description && (
     <div class="entry-content">

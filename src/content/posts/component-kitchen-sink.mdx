@@ -1,0 +1,711 @@
+---
+title: "Component Kitchen Sink"
+date: 2026-02-22
+draft: true
+tags: ["meta", "design", "components"]
+categories: ["Meta"]
+description: "Every custom component in one place — a living reference for what's available when writing posts."
+showToc: true
+---
+
+import CalloutBox from '../../components/CalloutBox.svelte';
+import PullQuote from '../../components/PullQuote.svelte';
+import ImageCaption from '../../components/ImageCaption.svelte';
+import Comparison from '../../components/Comparison.svelte';
+import Timeline from '../../components/Timeline.svelte';
+import FoodCard from '../../components/FoodCard.svelte';
+import FoodGrid from '../../components/FoodGrid.svelte';
+import DishCard from '../../components/DishCard.svelte';
+import RecipeCard from '../../components/RecipeCard.svelte';
+import SideNote from '../../components/SideNote.svelte';
+import BookCard from '../../components/BookCard.svelte';
+import LinkCard from '../../components/LinkCard.svelte';
+import IngredientScaler from '../../components/IngredientScaler.svelte';
+import StatBar from '../../components/StatBar.svelte';
+import ModelCard from '../../components/ModelCard.svelte';
+import BenchmarkTable from '../../components/BenchmarkTable.svelte';
+import AbstractCard from '../../components/AbstractCard.svelte';
+import ReadingList from '../../components/ReadingList.svelte';
+import DefinitionBlock from '../../components/DefinitionBlock.svelte';
+import ArgumentMap from '../../components/ArgumentMap.svelte';
+import ThoughtExperiment from '../../components/ThoughtExperiment.svelte';
+import PostSeries from '../../components/PostSeries.svelte';
+import DataTable from '../../components/DataTable.svelte';
+import PollChart from '../../components/PollChart.svelte';
+
+This page exists as a living reference. Every component I've built for this site lives here with real usage examples. When I'm writing a post and can't remember the props, I come here.
+
+---
+
+## PullQuote
+
+Typographic emphasis — no box, just weight. Use it when a sentence deserves to breathe on its own.
+
+**Left-aligned (default):**
+
+<PullQuote
+  quote="The patience isn't a personality trait you bring to the process. It's what the process teaches you."
+  attribution="What the Ramen Taught Me"
+/>
+
+**Centered, large:**
+
+<PullQuote
+  quote="Reason runs out. You jump anyway."
+  align="center"
+  size="large"
+/>
+
+---
+
+## ImageCaption
+
+Photo with caption and optional photo credit.
+
+**Standard with caption:**
+
+<ImageCaption
+  src="https://picsum.photos/seed/ramen-steam/900/500"
+  alt="Bowl of ramen with steam rising"
+  caption="The moment it's ready — everything assembled, broth still moving."
+  aspect="16/9"
+/>
+
+**With credit line:**
+
+<ImageCaption
+  src="https://picsum.photos/seed/market-stall/900/600"
+  alt="Japanese grocery store aisle"
+  caption="Mitsuwa Marketplace, first thing Saturday morning."
+  credit="Photo: Jason Albert"
+  aspect="3/2"
+/>
+
+**Wide bleed:**
+
+<ImageCaption
+  src="https://picsum.photos/seed/wide-kitchen/1200/500"
+  alt="Kitchen counter with ingredients"
+  caption="Everything laid out before starting. The mise en place is the meditation."
+  aspect="21/9"
+  wide
+/>
+
+---
+
+## Comparison
+
+Side-by-side A vs B. Good for products, methods, models — anything worth weighing.
+
+**With images, winner declared:**
+
+<Comparison
+  title="Fresh vs Dried Ramen Noodles"
+  winner="a"
+  a={{
+    label: "Sun Noodle Fresh",
+    image: "https://picsum.photos/seed/fresh-noodle/400/300",
+    items: [
+      "Alkaline water (kansui) gives real chew",
+      "Cooks in 90 seconds",
+      "Freezes well — buy in bulk",
+      "$4.99 for 4 portions"
+    ],
+    verdict: "No contest. The texture difference is not subtle."
+  }}
+  b={{
+    label: "Dried Ramen (Supermarket)",
+    image: "https://picsum.photos/seed/dried-noodle/400/300",
+    items: [
+      "Widely available anywhere",
+      "Long shelf life",
+      "Consistent but forgettable texture",
+      "$1.50 for 5 portions"
+    ],
+    verdict: "Fine in a pinch. Not the same dish."
+  }}
+/>
+
+**No images, tie:**
+
+<Comparison
+  title="Shio vs Shoyu Tare"
+  winner="tie"
+  a={{
+    label: "Shio (Salt)",
+    items: [
+      "Lighter, cleaner finish",
+      "Lets the broth shine through",
+      "Pairs with chicken or pork tonkotsu"
+    ],
+    verdict: "The purist's choice."
+  }}
+  b={{
+    label: "Shoyu (Soy)",
+    items: [
+      "Deeper umami baseline",
+      "More complex, slightly sweet",
+      "The most common style worldwide"
+    ],
+    verdict: "The crowd-pleaser's choice."
+  }}
+/>
+
+---
+
+## Timeline
+
+Chronological events. Works vertically (default) or horizontally.
+
+**Vertical — how tonkotsu gets made:**
+
+<Timeline
+  events={[
+    {
+      date: "Day before",
+      title: "Sourcing",
+      body: "Drive to Mitsuwa. Buy trotters, belly, and anything else that looks interesting.",
+      tag: "Prep"
+    },
+    {
+      date: "7:00 AM",
+      title: "Blanch the bones",
+      body: "Cover with cold water, boil 10 minutes, drain, scrub. Removes blood and impurities.",
+      tag: "Active"
+    },
+    {
+      date: "7:30 AM",
+      title: "Start the broth",
+      body: "Fresh water, bones back in, hard boil begins. The rolling boil is not a mistake.",
+      tag: "Active"
+    },
+    {
+      date: "8:00 AM – 7:00 PM",
+      title: "Wait. Check. Adjust. Repeat.",
+      body: "Add water when bones are exposed. Skim occasionally. Mostly just wait.",
+      tag: "Passive"
+    },
+    {
+      date: "7:30 PM",
+      title: "Strain and season",
+      body: "Fine mesh, discard solids. Add tare. Taste. Adjust. The broth should coat a spoon.",
+      tag: "Active"
+    },
+    {
+      date: "8:00 PM",
+      title: "Eat",
+      body: "Noodles, chashu, egg, scallion, corn, sesame oil. Twelve hours reduced to twenty minutes.",
+      tag: "Done",
+      tagColor: "#22c55e"
+    }
+  ]}
+/>
+
+**Horizontal — ramen history at a glance:**
+
+<Timeline
+  direction="horizontal"
+  events={[
+    { date: "1665", title: "First documented ramen", body: "Water Mito, Japan." },
+    { date: "1910", title: "First ramen shop opens", body: "Rairaiken, Tokyo." },
+    { date: "1958", title: "Instant ramen invented", body: "Nissin's Chicken Ramen." },
+    { date: "1971", title: "Cup Noodles", body: "Nissin again. Global scale." },
+    { date: "2000s", title: "Ramen renaissance", body: "Serious shops spread worldwide." },
+    { date: "Now", title: "You make it at home", body: "Twelve hours. Worth it." }
+  ]}
+/>
+
+---
+
+## CalloutBox
+
+Already existed — documented here for completeness.
+
+<CalloutBox type="info" title="Info">
+  Use this for helpful context that doesn't interrupt the flow.
+</CalloutBox>
+
+<CalloutBox type="warning" title="Watch out">
+  Use this for caveats, gotchas, or things that could go wrong.
+</CalloutBox>
+
+<CalloutBox type="note" title="Note" collapsible>
+  This one is collapsible. Good for supplementary detail that not everyone needs.
+</CalloutBox>
+
+<CalloutBox type="danger" title="Don't do this">
+  Hard warnings. Use sparingly or they lose meaning.
+</CalloutBox>
+
+---
+
+## FoodCard + FoodGrid
+
+Ingredient or product cards. Option B layout: full-width, image left (35%), notes always visible.
+
+<FoodGrid>
+  <FoodCard
+    name="Sun Noodle Fresh Ramen"
+    image="https://picsum.photos/seed/ramen-noodle/400/300"
+    price="$4.99"
+    origin="Hawaii, USA"
+    store="Mitsuwa Marketplace"
+    tags={["fresh", "alkaline", "wavy"]}
+    notes="The alkaline water gives real chew. Don't substitute dried pasta."
+  />
+  <FoodCard
+    name="Marukin Shio Tare"
+    image="https://picsum.photos/seed/shio-tare/400/300"
+    price="$7.99"
+    origin="Japan"
+    store="Mitsuwa Marketplace"
+    tags={["tare", "shio", "seasoning"]}
+    notes="Technically cheating. Excellent, and life is finite."
+  />
+</FoodGrid>
+
+---
+
+## DishCard
+
+Hero card for a finished dish. Full-bleed image with gradient overlay, optional masonry gallery.
+
+<DishCard
+  name="Tonkotsu Ramen"
+  heroImage="https://picsum.photos/seed/tonkotsu-bowl/900/500"
+  description="Twelve hours of bone broth, chashu pork belly, soft-boiled soy egg, fresh alkaline noodles. Worth every hour."
+  prepTime="30 min"
+  cookTime="12 hr"
+  serves={4}
+  origin="Japanese"
+  extraImages={[
+    { src: 'https://picsum.photos/seed/chashu-slice/600/800', caption: 'Chashu — soy-braised pork belly' },
+    { src: 'https://picsum.photos/seed/ramen-egg/600/400', caption: 'Marinated soft-boil egg' },
+    { src: 'https://picsum.photos/seed/tonkotsu-broth/600/700', caption: 'Broth after 12 hours' },
+  ]}
+/>
+
+---
+
+## RecipeCard
+
+Interactive recipe with step check-off and Save PDF button.
+
+<RecipeCard
+  client:load
+  title="Quick Shoyu Tare"
+  description="A simple seasoning base for ramen. Make once, refrigerate for weeks."
+  prepTime="5 min"
+  cookTime="10 min"
+  totalTime="15 min"
+  servings={8}
+  difficulty="easy"
+  ingredients={[
+    "½ cup soy sauce",
+    "2 tbsp mirin",
+    "1 tbsp sake",
+    "1 tsp sesame oil",
+    "1 clove garlic, smashed",
+    "1 slice fresh ginger"
+  ]}
+  steps={[
+    "Combine soy sauce, mirin, and sake in a small saucepan.",
+    "Add garlic and ginger. Bring to a gentle simmer over medium heat.",
+    "Simmer 8–10 minutes until slightly reduced.",
+    "Remove from heat. Stir in sesame oil.",
+    "Strain through a fine mesh strainer. Cool and refrigerate.",
+    "Use 1–2 tsp per bowl, added directly before the broth."
+  ]}
+  tags={["condiment", "Japanese", "make-ahead"]}
+/>
+
+---
+
+## SideNote
+
+Margin notes on wide screens, tap-to-reveal inline on mobile. Place `<SideNote>` immediately after the word it annotates — no space before the marker.
+
+The leap of faith is not irrationality<SideNote client:load>Kierkegaard didn't mean *blind* faith. He meant the move you make after reason has genuinely run out — not as a shortcut past thinking, but as the only available move beyond it.</SideNote> — it's the move you make after reason has done all it can.
+
+Unsupervised learning finds structure without labels
+
+
+
+
+<SideNote client:load>In ML terms: clustering, autoencoders, dimensionality reduction — all learn representations from data without being told what the right answer is.</SideNote>, which is closer to how humans actually develop expertise than supervised training is.
+
+---
+
+## BookCard
+
+Colored spine strip on the left with vertical title, cover image, then metadata. Optional `spineColor` prop to override the accent color.
+
+<BookCard
+  title="Either/Or"
+  author="Søren Kierkegaard"
+  year={1843}
+  cover="https://picsum.photos/seed/kierkegaard-book/200/300"
+  genre="Philosophy"
+  rating={5}
+  take="The aesthetic vs. ethical stages of existence. Volume II changed how I think about commitment. Dense but worth it — read the Judge's letters first."
+  url="https://en.wikipedia.org/wiki/Either/Or"
+/>
+
+<BookCard
+  title="Superintelligence"
+  author="Nick Bostrom"
+  year={2014}
+  genre="AI / Philosophy"
+  rating={3}
+  take="The orthogonality thesis and instrumental convergence are genuinely important ideas. The rest is scenario-building that has aged awkwardly."
+/>
+
+---
+
+## LinkCard
+
+Rich link preview. All fields except `url` and `title` are optional.
+
+**With image:**
+
+<LinkCard
+  url="https://arxiv.org/abs/2303.08774"
+  title="GPT-4 Technical Report"
+  description="We report the development of GPT-4, a large multimodal model which can accept image and text inputs and produce text outputs."
+  image="https://picsum.photos/seed/arxiv-gpt4/600/300"
+  siteName="arXiv"
+/>
+
+**Text only:**
+
+<LinkCard
+  url="https://plato.stanford.edu/entries/kierkegaard/"
+  title="Søren Kierkegaard — Stanford Encyclopedia of Philosophy"
+  description="Kierkegaard's life and thought, the stages of existence, the leap, and his influence on existentialism and theology."
+  siteName="Stanford Encyclopedia of Philosophy"
+/>
+
+---
+
+## IngredientScaler
+
+Interactive 1×/2×/4× ingredient scaler. Parses quantities including fractions and unicode fraction characters.
+
+<IngredientScaler
+  client:load
+  ingredients={[
+    "2 cups bread flour",
+    "1 tsp instant yeast",
+    "¾ tsp fine salt",
+    "1 tbsp olive oil",
+    "⅔ cup warm water",
+    "1/2 tsp honey",
+    "Pinch of sugar"
+  ]}
+/>
+
+---
+
+## StatBar
+
+Horizontal animated bars. Use `globalMax` to normalise all bars to the same scale. `unit` appends to the value label. Individual bars can take a `color` and a `note`.
+
+<StatBar
+  client:load
+  title="MMLU Benchmark (% accuracy)"
+  unit="%"
+  globalMax={100}
+  items={[
+    { label: "GPT-4o", value: 87.2 },
+    { label: "Claude 3.5 Sonnet", value: 88.7, color: "#a78bfa" },
+    { label: "Gemini 1.5 Pro", value: 85.9 },
+    { label: "Llama 3.1 405B", value: 88.6, note: "Best open-weights model" },
+    { label: "Mistral Large 2", value: 84.0 }
+  ]}
+/>
+
+**Without a `globalMax` — each bar is a percentage of its own `max`:**
+
+<StatBar
+  client:load
+  title="Context Window"
+  unit="k"
+  items={[
+    { label: "GPT-4o", value: 128, max: 1000 },
+    { label: "Claude 3.5", value: 200, max: 1000 },
+    { label: "Gemini 1.5 Pro", value: 1000, max: 1000, note: "1M token context" },
+    { label: "Llama 3.1", value: 128, max: 1000 }
+  ]}
+/>
+
+---
+
+## ModelCard
+
+Quick-reference card for an AI model. All fields except `name` and `provider` are optional.
+
+<ModelCard
+  name="Claude 3.5 Sonnet"
+  provider="Anthropic"
+  version="20241022"
+  params="~200B (est.)"
+  contextWindow="200k"
+  released="Oct 2024"
+  license="Proprietary"
+  modalities={["text", "vision", "code"]}
+  strengths={[
+    "Best-in-class instruction following",
+    "Strong reasoning and analysis",
+    "Excellent code generation",
+    "Low hallucination rate on factual tasks"
+  ]}
+  weaknesses={[
+    "No real-time information",
+    "Proprietary — no fine-tuning access",
+    "Can be over-cautious on edge cases"
+  ]}
+  url="https://www.anthropic.com/claude"
+/>
+
+---
+
+## BenchmarkTable
+
+Multi-model × multi-benchmark comparison grid. Best score per row is bolded and accent-colored. Cells are heat-mapped so top scores have a tinted background. Horizontally scrollable on mobile.
+
+<BenchmarkTable
+  title="Frontier Model Comparison (as of early 2025)"
+  models={["GPT-4o", "Claude 3.5", "Gemini 1.5 Pro", "Llama 3.1 405B"]}
+  benchmarks={[
+    {
+      name: "MMLU",
+      description: "Massive Multitask Language Understanding",
+      scores: [87.2, 88.7, 85.9, 88.6]
+    },
+    {
+      name: "HumanEval",
+      description: "Python code generation",
+      scores: [90.2, 92.0, 84.1, 89.0]
+    },
+    {
+      name: "MATH",
+      description: "Competition mathematics",
+      scores: [76.6, 71.1, 67.7, 73.8]
+    },
+    {
+      name: "GPQA",
+      description: "PhD-level science questions",
+      scores: [53.6, 65.0, 46.2, 50.7]
+    },
+    {
+      name: "MT-Bench",
+      description: "Multi-turn instruction following",
+      scores: [9.1, 9.3, 8.9, 8.7]
+    }
+  ]}
+  caption="Higher is better for all benchmarks. Bold = best in row."
+/>
+
+---
+
+## AbstractCard
+
+Paper reference card. Left accent stripe, title links to URL or DOI, authors auto-truncated at 3. `tldr` is your plain-English one-liner in a tinted callout.
+
+<AbstractCard
+  title="Attention Is All You Need"
+  authors={["Ashish Vaswani", "Noam Shazeer", "Niki Parmar", "Jakob Uszkoreit", "Llion Jones", "Aidan N. Gomez"]}
+  venue="NeurIPS"
+  year={2017}
+  tags={["transformers", "attention", "NLP"]}
+  abstract="We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train."
+  tldr="The paper that made modern LLMs possible. Introduced the transformer architecture that replaced RNNs across nearly all of NLP."
+  url="https://arxiv.org/abs/1706.03762"
+/>
+
+---
+
+## ReadingList
+
+A curated shelf of books — renders all the `BookCard` styles in a compact list without copy-pasting component markup. Pass an array of book objects to `books`.
+
+<ReadingList
+  title="On intelligence and mind"
+  intro="Books that changed how I think about thinking."
+  books={[
+    {
+      title: "Gödel, Escher, Bach",
+      author: "Douglas Hofstadter",
+      year: 1979,
+      cover: "https://picsum.photos/seed/geb-book/200/300",
+      genre: "Math / Cognition",
+      rating: 5,
+      take: "Strange loops, consciousness, and the impossibility of stepping outside the system you're part of.",
+      url: "https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach"
+    },
+    {
+      title: "Thinking, Fast and Slow",
+      author: "Daniel Kahneman",
+      year: 2011,
+      cover: "https://picsum.photos/seed/kahneman-thinking/200/300",
+      genre: "Psychology",
+      rating: 4,
+      take: "System 1 vs System 2. Knowing about bias doesn't protect you from it — that's the uncomfortable part."
+    },
+    {
+      title: "The Structure of Scientific Revolutions",
+      author: "Thomas Kuhn",
+      year: 1962,
+      genre: "Philosophy of Science",
+      rating: 5,
+      take: "Science doesn't accumulate — it overturns. Ask yourself what your current paradigm is."
+    }
+  ]}
+/>
+
+---
+
+## DefinitionBlock
+
+Term + formal definition + plain-English gloss. Left accent border. Use for introducing precise concepts in AI or philosophy posts.
+
+<DefinitionBlock
+  term="Instrumental Convergence"
+  formal="Any sufficiently capable agent optimising for almost any goal will, as instrumental sub-goals, tend to acquire resources, preserve itself, and resist modification — regardless of its terminal objective."
+  plain="A paperclip-maximising AI doesn't need to hate humans. It just needs to notice that humans might turn it off. That's enough for the problem to be serious."
+  source="Bostrom, Superintelligence (2014)"
+  sourceUrl="https://en.wikipedia.org/wiki/Instrumental_convergence"
+/>
+
+<DefinitionBlock
+  term="Strange Loop"
+  formal="A strange loop occurs when, by moving upward (or downward) through the levels of a hierarchical system, one unexpectedly finds oneself back where one started."
+  plain="Like a sentence that refers to itself, or a mind that can think about its own thinking. Hofstadter argues this self-referential structure is the source of consciousness."
+  source="Hofstadter, Gödel, Escher, Bach (1979)"
+/>
+
+---
+
+## ArgumentMap
+
+Premise → conclusion tree. `flagged` marks a contested premise in amber. `objection` attaches a red counterpoint inline. `valid` prop shows a green/red badge on the conclusion.
+
+<ArgumentMap
+  title="The Orthogonality Thesis Argument"
+  conclusion="We cannot assume a superintelligent AI will share human values."
+  valid={true}
+  premises={[
+    {
+      text: "Intelligence and goals are orthogonal — any level of intelligence is compatible with any goal.",
+      premises: [
+        { text: "Intelligence is about optimising efficiently toward goals, not about which goals are chosen." },
+        { text: "There is no logical reason a more capable reasoner must converge on human-like values." }
+      ]
+    },
+    {
+      text: "A system can be superintelligent at achieving a goal while that goal remains arbitrary from our perspective.",
+      objection: "Some argue convergent instrumental goals create de facto value alignment pressure.",
+      flagged: true
+    },
+    {
+      text: "Therefore, high capability does not imply benevolence or value alignment."
+    }
+  ]}/>
+
+---
+
+## ThoughtExperiment
+
+A styled scenario box for philosophy and ethics posts. Wraps freeform prose in the default slot, ends with a bolded question, and optionally cites the original thinker.
+
+<ThoughtExperiment
+  title="The Experience Machine"
+  question="If you could plug in and never know the difference, would you?"
+  origin="Robert Nozick, Anarchy, State, and Utopia (1974)"
+>
+  Imagine a machine that can give you any experience you desire. Brilliant neuroscientists have worked out a way to stimulate your brain so that you would think and feel you were writing a great novel, or making a friend, or reading an interesting book. All the time you would be floating in a tank, with electrodes attached to your brain.
+
+  Should you plug in? The machine offers maximum subjective happiness. You would never know you were missing anything. And yet most people hesitate.
+</ThoughtExperiment>
+
+---
+
+## PostSeries
+
+A navigation banner for multi-part series. Shows the series name, a pip progress indicator, an expandable parts list, and prev/next navigation.
+
+<PostSeries
+  client:load
+  seriesTitle="The Alignment Problem"
+  partNumber={2}
+  totalParts={4}
+  parts={[
+    { title: "What Does It Mean for an AI to Want Something?", url: "/posts/alignment-1" },
+    { title: "The Orthogonality Thesis and Why It Haunts Me", url: "/posts/alignment-2", current: true },
+    { title: "Corrigibility Is Not Enough", url: "/posts/alignment-3" },
+    { title: "What Would Actually Solving It Look Like?", url: "/posts/alignment-4" }
+  ]}
+  prev={{ title: "What Does It Mean for an AI to Want Something?", url: "/posts/alignment-1" }}
+  next={{ title: "Corrigibility Is Not Enough", url: "/posts/alignment-3" }}
+/>
+
+---
+
+## DataTable
+
+A sortable general-purpose table. Click any column header to sort ascending or descending. Use `striped` for alternating row shading, and `align` to control per-column text alignment.
+
+<DataTable
+  client:load
+  caption="Selected AI safety benchmarks across frontier models (higher = better)"
+  headers={["Model", "Release", "TruthfulQA", "MMLU", "GSM8K", "Context"]}
+  align={["left", "center", "right", "right", "right", "right"]}
+  striped={true}
+  rows={[
+    ["GPT-4o", "2024", "89.2", "87.0", "92.0", "128k"],
+    ["Claude 3.5 Sonnet", "2024", "88.6", "88.7", "96.4", "200k"],
+    ["Gemini 1.5 Pro", "2024", "85.1", "85.9", "91.7", "1M"],
+    ["Llama 3.1 405B", "2024", "83.4", "87.3", "89.0", "128k"],
+    ["Mistral Large 2", "2024", "82.7", "84.0", "87.2", "128k"]
+  ]}
+/>
+
+---
+
+## PollChart
+
+Horizontal bar chart for survey and poll data. The leading response gets the full accent color — all others are muted. `sorted` (default `true`) orders bars by percentage. Pass `multiSelect` when totals exceed 100%. Source, sample size, margin of error, and date all appear in the footer.
+
+<PollChart
+  client:load
+  question="What career path are you most interested in pursuing after graduation?"
+  responses={[
+    { label: "Software Engineering", pct: 34 },
+    { label: "Data Science / AI", pct: 28 },
+    { label: "Product Management", pct: 18 },
+    { label: "UX / Design", pct: 12 },
+    { label: "Other", pct: 8 }
+  ]}
+  source="LinkedIn Gen Z Career Survey"
+  n={4820}
+  date="Q3 2024"
+  margin={2}
+/>
+
+<PollChart
+  client:load
+  question="What's most important to you in a potential partner?"
+  sorted={false}
+  multiSelect={true}
+  responses={[
+    { label: "Emotional maturity", pct: 71 },
+    { label: "Shared values", pct: 68 },
+    { label: "Sense of humor", pct: 52 },
+    { label: "Financial stability", pct: 41 },
+    { label: "Physical attraction", pct: 38 },
+    { label: "Ambition / drive", pct: 29 }
+  ]}
+  source="Hinge Compatibility Report"
+  n={12400}
+  date="2024"
+/>

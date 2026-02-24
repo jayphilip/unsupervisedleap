@@ -2,9 +2,6 @@
    UNSUPERVISED LEAP — GLOBAL STYLES
    =================================== */
 
-/* Import fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
-
 /* ========== CSS VARIABLES — dark mode by default ========== */
 :root {
   /* Typography */
@@ -59,6 +56,7 @@ html {
 
 body {
   margin: 0;
+  padding-top: 57px; /* fixed header: 56px nav + 1px border */
   background: var(--theme);
   color: var(--primary);
   font-family: var(--font-sans);
@@ -74,6 +72,37 @@ a { color: var(--link); }
 a:focus, button:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 ::selection { background: var(--accent); color: var(--theme); }
 
+/* ========== ACCESSIBILITY ========== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1em;
+  z-index: 9999;
+  padding: 0.6em 1.2em;
+  background: var(--accent);
+  color: var(--theme);
+  font-weight: 700;
+  font-size: 0.9em;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ========== LAYOUT ========== */
 .main {
   max-width: var(--main-width);
@@ -87,8 +116,10 @@ a:focus, button:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   background: var(--theme);
   border-bottom: 1px solid var(--border);
   padding: 0 var(--content-gap);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   backdrop-filter: blur(8px);
 }
@@ -133,6 +164,12 @@ a:focus, button:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 .nav-links a:hover {
   color: var(--primary);
   background: var(--entry);
+}
+
+.nav-links a[aria-current="page"] {
+  color: var(--primary);
+  background: var(--entry);
+  font-weight: 600;
 }
 
 /* ========== FOOTER ========== */
@@ -221,6 +258,23 @@ footer a:hover { color: var(--accent); }
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+.entry-eyebrow {
+  margin: 0 0 0.45em;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+}
+
+.entry-eyebrow a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.entry-eyebrow a:hover { text-decoration: underline; }
+
+.eyebrow-sep { color: var(--tertiary); }
+
 .entry-header h2 {
   font-size: 1.55em;
   font-weight: 700;
@@ -233,9 +287,25 @@ footer a:hover { color: var(--accent); }
   color: var(--primary);
   text-decoration: none;
   transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
 }
 
 .entry-header h2 a:hover { color: var(--link); }
+
+.entry-arrow {
+  font-size: 0.75em;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.post-entry:hover .entry-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
 
 .entry-content {
   color: var(--secondary);

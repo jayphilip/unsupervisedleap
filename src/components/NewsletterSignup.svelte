@@ -55,7 +55,7 @@
     {:else}
       <p class="card-eyebrow">Stay in the loop</p>
       <h2 class="card-headline">Get new posts by email</h2>
-      <p class="card-sub">No noise. Just new essays when they drop — on AI, fatherhood, and the questions worth asking.</p>
+      <p class="card-sub">No noise. Just new essays when they drop — on AI, fatherhood, food and the questions worth asking.</p>
       <form class="newsletter-form" onsubmit={submit} novalidate>
         <input
           type="email"

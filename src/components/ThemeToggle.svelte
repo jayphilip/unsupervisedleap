@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let isDark = $state(true);
+  let isDark = $state(
+    typeof document !== 'undefined'
+      ? document.documentElement.getAttribute('data-theme') !== 'light'
+      : true
+  );
 
   onMount(() => {
     isDark = document.documentElement.getAttribute('data-theme') !== 'light';
@@ -15,7 +19,7 @@
   }
 </script>
 
-<button class="theme-toggle" onclick={toggle} aria-label="Toggle theme">
+<button class="theme-toggle" onclick={toggle} aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
   {#if isDark}
     <!-- Sun: switch to light -->
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

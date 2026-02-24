@@ -54,6 +54,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>"
     />
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
     <!-- RSS -->
     <link
       rel="alternate"
@@ -71,9 +79,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     {isPost && <ReadingProgress client:load />}
     <Header />
-    <main class="main">
+    <main class="main" id="main-content">
       <slot />
     </main>
     <Footer />

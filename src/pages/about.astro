@@ -1,56 +1,321 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.svelte';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const postCount = allPosts.length;
 ---
 
 <BaseLayout
   title="About"
   description="Jason Albert writes about fatherhood, artificial intelligence, and the questions worth asking."
 >
-  <article class="post-single">
-    <header class="post-header">
-      <h1 class="post-title">About</h1>
-    </header>
-    <div class="post-content">
-      <h2>Unsupervised Leap</h2>
-      <p><em>No labels. No loss function. Just thinking out loud.</em></p>
-      <p>
-        This is a blog by <strong>Jason Albert</strong> — dad, AI thinker, and occasional
-        philosopher.
-      </p>
-      <p>Three things I can't stop thinking about:</p>
-      <ul>
-        <li>
-          <strong>Fatherhood</strong> — the original unsupervised leap problem. No training data.
-          Constant distribution shift. Somehow it works.
-        </li>
-        <li>
-          <strong>Artificial Intelligence</strong> — what we're actually building, what it reveals
-          about us, and why the hard questions aren't technical.
-        </li>
-        <li>
-          <strong>Philosophy</strong> — the old tools that still cut. Stoicism, mortality, meaning,
-          the examined life.
-        </li>
-      </ul>
-      <p>
-        These three don't always connect neatly. Sometimes they connect in ways I didn't expect.
-        That's what this blog is for.
-      </p>
-      <hr />
-      <h3>Why <em>Unsupervised Leap</em>?</h3>
-      <p>
-        The name carries two meanings at once. <em>Unsupervised</em> comes from machine learning:
-        a system that finds structure in data without labeled examples, no one telling it what's
-        right. <em>Leap</em> comes from Kierkegaard — the leap of faith, the move you make when
-        reason runs out and you go anyway. Together they describe something true about how we
-        actually grow: not by following instructions, but by paying attention and then jumping.
-      </p>
-      <p>
-        If something here resonates, I'd love to hear from you. Find me on{' '}
-        <a href="https://github.com/yourusername" rel="noopener noreferrer" target="_blank"
-          >GitHub</a
-        >.
-      </p>
-    </div>
-  </article>
+  <div class="about-page">
+
+    <!-- ── HERO ── -->
+    <section class="about-hero">
+      <div class="avatar-wrap">
+        <!-- Swap src below for a real photo when ready -->
+        <div class="avatar-initials" aria-label="Jason Albert">JA</div>
+        <div class="avatar-ring" aria-hidden="true"></div>
+      </div>
+
+      <div class="hero-copy">
+        <p class="hero-eyebrow">The person behind the posts</p>
+        <h1 class="hero-name">Jason Albert</h1>
+        <p class="hero-tagline">
+          Dad. AI thinker. Occasional philosopher. Home cook.<br />
+          <em>No labels. No loss function. Just thinking out loud.</em>
+        </p>
+
+        <div class="hero-links">
+          <a href="https://github.com/jayphilip" class="hero-link" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="/posts/" class="hero-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            {postCount} posts
+          </a>
+          <a href="/rss.xml" class="hero-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+            RSS
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TOPIC CARDS ── -->
+    <section class="topics" aria-label="What I write about">
+      <h2 class="section-label">What I write about</h2>
+      <div class="topics-grid">
+        <a href="/categories/dad/" class="topic-card">
+          <span class="topic-icon" aria-hidden="true">👶</span>
+          <h3>Fatherhood</h3>
+          <p>The original unsupervised problem. No training data. Constant distribution shift. Somehow it works.</p>
+        </a>
+        <a href="/categories/ai/" class="topic-card">
+          <span class="topic-icon" aria-hidden="true">🧠</span>
+          <h3>Artificial Intelligence</h3>
+          <p>What we're actually building, what it reveals about us, and why the hard questions aren't technical.</p>
+        </a>
+        <a href="/categories/food/" class="topic-card">
+          <span class="topic-icon" aria-hidden="true">🍜</span>
+          <h3>Food</h3>
+          <p>Cooking as attention. Recipes as repeatable experiments. What a bowl of ramen can teach you about patience.</p>
+        </a>
+        <a href="/categories/philosophy/" class="topic-card">
+          <span class="topic-icon" aria-hidden="true">⚖️</span>
+          <h3>Philosophy</h3>
+          <p>The old tools that still cut. Stoicism, mortality, meaning — the examined life in practice.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── WHY THE NAME ── -->
+    <section class="about-section">
+      <h2 class="section-label">Why <em>Unsupervised Leap</em>?</h2>
+      <div class="prose-block">
+        <p>
+          The name carries two meanings at once. <em>Unsupervised</em> comes from machine
+          learning: a system that finds structure in data without labeled examples — no one
+          telling it what's right. <em>Leap</em> comes from Kierkegaard — the leap of faith,
+          the move you make when reason runs out and you go anyway.
+        </p>
+        <p>
+          Together they describe something true about how we actually grow: not by following
+          a curriculum, but by paying close attention and then jumping. Fatherhood, AI,
+          food, philosophy — they don't look related. But a bowl of ramen has taught me more
+          about patience than most books on the subject. And a language model confabulating
+          with total confidence turns out to sound a lot like parenting a toddler.
+          The threads cross when they cross. I'm just here to notice.
+        </p>
+      </div>
+    </section>
+
+    <!-- ── NEWSLETTER CTA ── -->
+    <section class="about-newsletter">
+      <NewsletterSignup client:load card={true} />
+    </section>
+
+  </div>
 </BaseLayout>
+
+<style>
+  .about-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+  }
+
+  /* ── HERO ── */
+  .about-hero {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 2.5em;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5em 2.75em;
+  }
+
+  /* Avatar */
+  .avatar-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  .avatar-initials {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 70%, #000) 0%,
+      var(--accent) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    font-size: 2.2em;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    /* Uncomment below and remove gradient + initials when you have a real photo:
+       background: url('/images/jason-albert.jpg') center/cover; */
+  }
+
+  .avatar-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0.4;
+  }
+
+  /* Hero copy */
+  .hero-eyebrow {
+    margin: 0 0 0.4em;
+    font-family: var(--font-sans);
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .hero-name {
+    margin: 0 0 0.35em;
+    font-family: var(--font-sans);
+    font-size: clamp(1.8em, 4vw, 2.6em);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--primary);
+    line-height: 1.05;
+  }
+
+  .hero-tagline {
+    margin: 0 0 1.25em;
+    font-family: var(--font-serif);
+    font-size: 1em;
+    color: var(--secondary);
+    line-height: 1.6;
+  }
+
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+  }
+
+  .hero-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-sans);
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--secondary);
+    background: var(--theme);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.35em 0.9em;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .hero-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, var(--theme));
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: var(--font-sans);
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--secondary);
+    margin: 0 0 1.1em;
+  }
+
+  /* ── TOPIC CARDS ── */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+  }
+
+  .topic-card {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5em 1.4em 1.6em;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .topic-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .topic-icon {
+    font-size: 1.75em;
+    line-height: 1;
+  }
+
+  .topic-card h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .topic-card p {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 0.875em;
+    color: var(--secondary);
+    line-height: 1.55;
+  }
+
+  /* ── PROSE SECTION ── */
+  .about-section {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2em 2.25em;
+  }
+
+  .prose-block p {
+    font-family: var(--font-serif);
+    font-size: 1.05em;
+    line-height: 1.75;
+    color: var(--content);
+    margin: 0 0 1em;
+  }
+
+  .prose-block p:last-child { margin-bottom: 0; }
+
+  .prose-block em { color: var(--accent); font-style: italic; }
+
+  /* ── NEWSLETTER ── */
+  .about-newsletter { margin-top: 0.5em; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .about-hero {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 2em 1.5em;
+      gap: 1.5em;
+    }
+
+    .avatar-wrap {
+      margin: 0 auto;
+    }
+
+    .hero-links {
+      justify-content: center;
+    }
+
+    .topics-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
