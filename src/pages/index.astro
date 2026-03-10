@@ -87,7 +87,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
 
     .social-icons {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 0.5em;
     }
 
@@ -118,7 +118,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
   </style>
 
   <section aria-label="Recent posts">
-    {posts.map((post) => {
+    {posts.map((post, i) => {
       const wordCount = post.body?.split(/\s+/).length ?? 0;
       const readingTime = Math.max(1, Math.ceil(wordCount / 200));
       return (
@@ -130,6 +130,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
           tags={post.data.tags}
           categories={post.data.categories}
           readingTime={readingTime}
+          featured={i === 0}
         />
       );
     })}

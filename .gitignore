@@ -19,3 +19,6 @@ Thumbs.db
 
 # Worker local dev state
 worker/.wrangler/
+
+# Experiment run artifacts
+experiments/socrates/runs/

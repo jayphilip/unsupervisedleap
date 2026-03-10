@@ -20,17 +20,15 @@
 <style>
   .author-bio {
     margin: 4em 0 3em;
-    padding: 2em;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    padding: 0.25em 0 0.25em 1.5em;
+    border-left: 3px solid var(--accent);
   }
 
   .author-name {
     font-family: var(--font-sans);
-    font-size: 1.25em;
+    font-size: 1em;
     font-weight: 700;
-    margin: 0 0 0.75em;
+    margin: 0 0 0.4em;
     color: var(--primary);
   }
 
@@ -39,5 +37,6 @@
     line-height: 1.6;
     margin: 0;
     font-family: var(--font-sans);
+    font-size: 0.95em;
   }
 </style>

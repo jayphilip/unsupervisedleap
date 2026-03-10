@@ -5,11 +5,12 @@
     prepTime?: string;
     cookTime?: string;
     totalTime?: string;
-    servings?: number;
+    servings?: number | string;
     difficulty?: 'easy' | 'medium' | 'hard';
     ingredients: string[];
     steps: string[];
     tags?: string[];
+    collapsed?: boolean;
   }
 
   let {
@@ -23,6 +24,7 @@
     ingredients,
     steps,
     tags = [],
+    collapsed: initialCollapsed = true,
   }: Props = $props();
 
   const difficultyColor: Record<string, string> = {
@@ -30,6 +32,12 @@
     medium: '#f59e0b',
     hard: '#ef4444',
   };
+
+  let collapsed = $state(initialCollapsed);
+
+  function toggleCollapsed() {
+    collapsed = !collapsed;
+  }
 
   // Track which steps have been checked off
   let done = $state<boolean[]>(steps.map(() => false));
@@ -89,138 +97,161 @@
   }
 </script>
 
-<section class="recipe-card" id={cardId}>
+<section class="recipe-card" id={cardId} class:is-collapsed={collapsed}>
   <header class="recipe-header">
     <div class="recipe-title-row">
-      <h2 class="recipe-title">{title}</h2>
-      <button class="recipe-pdf-btn" onclick={printCard} title="Save as PDF" aria-label="Save recipe as PDF">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Save PDF
+      <button
+        class="recipe-toggle"
+        onclick={toggleCollapsed}
+        aria-expanded={!collapsed}
+        aria-controls="{cardId}-body"
+      >
+        <h2 class="recipe-title">{title}</h2>
+        <svg class="toggle-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
+      {#if !collapsed}
+        <button class="recipe-pdf-btn" onclick={printCard} title="Save as PDF" aria-label="Save recipe as PDF">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Save PDF
+        </button>
+      {/if}
     </div>
-    {#if description}
+    {#if description && !collapsed}
       <p class="recipe-desc">{description}</p>
     {/if}
-
-    <div class="recipe-stats">
-      {#if prepTime}
-        <div class="stat">
-          <span class="stat-label">Prep</span>
-          <span class="stat-value">{prepTime}</span>
-        </div>
-      {/if}
-      {#if cookTime}
-        <div class="stat">
-          <span class="stat-label">Cook</span>
-          <span class="stat-value">{cookTime}</span>
-        </div>
-      {/if}
-      {#if totalTime}
-        <div class="stat">
-          <span class="stat-label">Total</span>
-          <span class="stat-value">{totalTime}</span>
-        </div>
-      {/if}
-      {#if servings}
-        <div class="stat">
-          <span class="stat-label">Serves</span>
-          <span class="stat-value">{servings}</span>
-        </div>
-      {/if}
-      {#if difficulty}
-        <div class="stat">
-          <span class="stat-label">Level</span>
-          <span
-            class="stat-value"
-            style="color: {difficultyColor[difficulty]}; font-weight: 600; text-transform: capitalize;"
-          >{difficulty}</span>
-        </div>
-      {/if}
-    </div>
+    {#if description && collapsed}
+      <p class="recipe-desc-preview">{description}</p>
+    {/if}
   </header>
 
-  <div class="recipe-body">
-    <div class="recipe-ingredients">
-      <h3>Ingredients</h3>
-      <ul>
-        {#each ingredients as item}
-          <li>{item}</li>
-        {/each}
-      </ul>
-    </div>
+  {#if !collapsed}
+    <div id="{cardId}-body">
+      <div class="recipe-stats-row">
+        {#if prepTime}<span class="stat-chip"><span class="stat-chip-label">Prep</span> {prepTime}</span>{/if}
+        {#if cookTime}<span class="stat-chip"><span class="stat-chip-label">Cook</span> {cookTime}</span>{/if}
+        {#if totalTime}<span class="stat-chip"><span class="stat-chip-label">Total</span> {totalTime}</span>{/if}
+        {#if servings}<span class="stat-chip"><span class="stat-chip-label">Serves</span> {servings}</span>{/if}
+        {#if difficulty}<span class="stat-chip"><span class="stat-chip-label">Level</span> <span style="color: {difficultyColor[difficulty]}; text-transform: capitalize;">{difficulty}</span></span>{/if}
+      </div>
 
-    <div class="recipe-steps">
-      <h3>Instructions</h3>
-      <ol>
-        {#each steps as step, i}
-          <li class:done={done[i]}>
-            <button
-              class="step-btn"
-              onclick={() => toggleStep(i)}
-              aria-pressed={done[i]}
-              title={done[i] ? 'Mark undone' : 'Mark done'}
-            >
-              <span class="step-text">{step}</span>
-            </button>
-          </li>
-        {/each}
-      </ol>
-      <p class="step-hint">Tap a step to mark it done.</p>
-    </div>
-  </div>
+      <div class="recipe-body">
+        <div class="recipe-ingredients">
+          <h3>Ingredients</h3>
+          <ul>
+            {#each ingredients as item}
+              <li>{item}</li>
+            {/each}
+          </ul>
+        </div>
 
-  {#if tags.length > 0}
-    <footer class="recipe-footer">
-      {#each tags as tag}
-        <span class="recipe-tag">{tag}</span>
-      {/each}
-    </footer>
+        <div class="recipe-steps">
+          <h3>Instructions</h3>
+          <ol>
+            {#each steps as step, i}
+              <li class:done={done[i]}>
+                <button
+                  class="step-btn"
+                  onclick={() => toggleStep(i)}
+                  aria-pressed={done[i]}
+                  title={done[i] ? 'Mark undone' : 'Mark done'}
+                >
+                  <span class="step-text">{step}</span>
+                </button>
+              </li>
+            {/each}
+          </ol>
+          <p class="step-hint">Tap a step to mark it done.</p>
+        </div>
+      </div>
+
+      {#if tags.length > 0}
+        <footer class="recipe-footer">
+          {#each tags as tag}
+            <span class="recipe-tag">{tag}</span>
+          {/each}
+        </footer>
+      {/if}
+    </div>
   {/if}
 </section>
 
 <style>
   .recipe-card {
-    margin: 2.5em 0;
+    margin: 0.35em 0;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     background: var(--entry);
     font-family: var(--font-sans);
+    transition: border-color 0.15s;
+  }
+
+  .recipe-card:hover {
+    border-color: color-mix(in srgb, var(--border) 60%, var(--secondary));
   }
 
   .recipe-header {
-    padding: 1.5em 1.75em 1.25em;
-    border-bottom: 1px solid var(--border);
+    padding: 0.8em 1.1em;
   }
 
   .recipe-title-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1em;
-    margin-bottom: 0.3em;
+    align-items: flex-start;
+    gap: 0.75em;
+  }
+
+  .recipe-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    min-width: 0;
+  }
+
+  .recipe-toggle:hover .recipe-title {
+    color: var(--accent);
+  }
+
+  .toggle-chevron {
+    flex-shrink: 0;
+    color: var(--secondary);
+    transition: transform 0.2s;
+    margin-top: 0.15em;
+  }
+
+  :global(.recipe-card:not(.is-collapsed)) .toggle-chevron {
+    transform: rotate(180deg);
   }
 
   .recipe-title {
     margin: 0;
-    font-size: 1.3em;
-    font-weight: 700;
+    font-size: 1em;
+    font-weight: 600;
     color: var(--primary);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
+    transition: color 0.15s;
+    line-height: 1.35;
   }
 
   .recipe-pdf-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35em;
-    padding: 0.35em 0.8em;
-    font-size: 0.75em;
+    padding: 0.3em 0.7em;
+    font-size: 0.72em;
     font-weight: 600;
     font-family: var(--font-sans);
     color: var(--secondary);
     background: none;
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
@@ -233,48 +264,44 @@
   }
 
   .recipe-desc {
-    margin: 0 0 1.1em;
-    font-size: 0.92em;
+    margin: 0.45em 0 0.1em;
+    font-size: 0.85em;
     color: var(--secondary);
     line-height: 1.5;
   }
 
-  .recipe-stats {
-    display: flex;
-    flex-wrap: wrap;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+  .recipe-desc-preview {
+    margin: 0.25em 0 0;
+    font-size: 0.82em;
+    color: var(--secondary);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .stat {
-    flex: 1;
-    min-width: 80px;
+  .recipe-stats-row {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.7em 0.5em;
-    border-right: 1px solid var(--border);
-    text-align: center;
+    flex-wrap: wrap;
+    gap: 0.4em 0.75em;
+    padding: 0.6em 1.1em;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
-  .stat:last-child {
-    border-right: none;
-  }
-
-  .stat-label {
-    font-size: 0.72em;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+  .stat-chip {
+    font-size: 0.78em;
     color: var(--secondary);
-    font-weight: 600;
-    margin-bottom: 0.2em;
   }
 
-  .stat-value {
-    font-size: 0.9em;
-    font-weight: 600;
-    color: var(--primary);
+  .stat-chip-label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85em;
+    color: var(--tertiary);
+    margin-right: 0.2em;
   }
 
   .recipe-body {
@@ -290,7 +317,7 @@
 
   .recipe-ingredients,
   .recipe-steps {
-    padding: 1.5em 1.75em;
+    padding: 1em 1.25em;
   }
 
   .recipe-ingredients {
@@ -405,7 +432,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.4em;
-    padding: 0.9em 1.75em;
+    padding: 0.65em 1.25em;
     border-top: 1px solid var(--border);
   }
 

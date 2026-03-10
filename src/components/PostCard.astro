@@ -7,9 +7,10 @@ interface Props {
   tags?: string[];
   categories?: string[];
   readingTime?: number;
+  featured?: boolean;
 }
 
-const { title, description, date, slug, tags = [], categories = [], readingTime } = Astro.props;
+const { title, description, date, slug, categories = [], readingTime, featured = false } = Astro.props;
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'short',
@@ -17,7 +18,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
 });
 ---
 
-<article class="post-entry">
+<article class={`post-entry${featured ? ' post-entry--featured' : ''}`}>
   <header class="entry-header">
     {categories.length > 0 && (
       <p class="entry-eyebrow">
@@ -44,17 +45,5 @@ const formattedDate = date.toLocaleDateString('en-US', {
   <footer class="entry-footer">
     <time datetime={date.toISOString()}>{formattedDate}</time>
     {readingTime && <span>· {readingTime} min read</span>}
-    {tags.length > 0 && (
-      <div class="entry-tags">
-        {tags.map((tag) => (
-          <a
-            href={`/tags/${tag.toLowerCase().replace(/ /g, '-')}/`}
-            class="tag-chip"
-          >
-            {tag}
-          </a>
-        ))}
-      </div>
-    )}
   </footer>
 </article>

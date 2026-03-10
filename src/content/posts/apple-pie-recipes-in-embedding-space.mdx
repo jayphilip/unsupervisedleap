@@ -1,0 +1,630 @@
+---
+title: "Apple Pie in Embedding Space"
+date: 2026-03-09
+draft: false
+tags: ["food", "machine-learning", "embeddings", "visualization"]
+categories: ["Food", "AI"]
+description: "Twelve apple pie recipes — Food52, Bon Appétit, BBC Good Food, and AllRecipes — their ingredients projected into 2D embedding space. What clusters? What doesn't?"
+showToc: true
+---
+
+import EmbeddingScatterPlot from '../../components/EmbeddingScatterPlot.svelte';
+import RecipeCard from '../../components/RecipeCard.svelte';
+import CalloutBox from '../../components/CalloutBox.svelte';
+import PullQuote from '../../components/PullQuote.svelte';
+import DefinitionBlock from '../../components/DefinitionBlock.svelte';
+
+Before I ran this experiment, I expected brandy to be the weird one — the BBC deep-dish recipe soaks sultanas in brandy, and I figured both would land far from everything else. They didn't land together. In ingredient embedding space, brandy migrates toward pastry and structure, while sultanas drift toward the spice and aromatic cluster. Neither landed where I'd have put them. That result says something true about how language works, and it's what this post is about.
+
+I pulled twelve apple pie recipes from Food52, Bon Appétit, BBC Good Food, and AllRecipes, extracted their ingredients, embedded them locally with a BERT-family model, and projected to 2D with UMAP. The question: what clusters? Most of it is exactly what you'd expect. One thing isn't.
+
+<DefinitionBlock
+  term="How ingredient embeddings work"
+  formal="A text embedding model maps each ingredient string to a vector in ℝ³⁸⁴. Vectors are trained such that semantically similar inputs have geometrically proximate representations — ingredients that appear in similar contexts in food writing end up near each other in the vector space."
+  plain="The model has read an enormous amount of recipe text. It knows that 'cinnamon' and 'nutmeg' appear together constantly, so they land near each other. It doesn't know that 'brandy' is a fruit spirit — it only knows where that word appears in sentences. Which turns out to be nowhere near apples. It has never tasted anything. It has only read."
+  source="BAAI/bge-small-en-v1.5 via fastembed (Devlin et al., BERT, 2019)"
+/>
+
+UMAP then takes those 384-dimensional vectors and finds a 2D layout that preserves neighborhood structure — ingredients close in high-dimensional space stay close in the plot. With 121 points and `n_neighbors=5`, the clusters are suggestive, not definitive. This is a toy experiment. But the patterns are real enough to be interesting.
+
+---
+
+## The Twelve Recipes
+
+Food52, Bon Appétit, BBC Good Food, and AllRecipes. No hand-editing of ingredients — these are the strings exactly as published.
+
+<RecipeCard
+  client:load
+  title="Apple Pie"
+  description="Food52's canonical version. Macerates the apples for three hours and reduces the liquid to a caramel syrup — technique-forward, minimally spiced."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "2 1/2 pound (about 4 large) tart, firm apples, such as Granny Smith or Honeycrisp, peeled and cut to 3/4-inch thick wedges",
+    "2 tablespoon (25 grams) granulated sugar",
+    "6 tablespoon (75 grams) light brown sugar",
+    "3/4 teaspoon ground allspice or cinnamon",
+    "1/2 teaspoon freshly ground black pepper or cardamom",
+    "1/2 teaspoon kosher salt",
+    "1 small lemon, peel removed in large 2-inch swaths, plus 1 tablespoon of its juice",
+    "1 tablespoon cornstarch",
+    "1 quantity all-butter double-crust pie dough, chilled",
+    "1 egg yolk beaten with a splash of water",
+    "Flaky salt and turbinado sugar, for finishing"
+  ]}
+  steps={[
+    "Combine the apples, sugars, spices, salt, lemon peels, 1 tablespoon lemon juice, and cornstarch in a large bowl. Toss to coat well. Let macerate for 3 hours at room temperature.",
+    "Divide chilled dough in half. Roll one portion to an 11–12-inch round and drape into pie pan. Chill both crusts for 30 minutes.",
+    "Drain macerating apples into a saucepan; reduce the liquid until thick and caramel-like, about 1–2 minutes.",
+    "Fill pie with apples, dome slightly in center, spoon syrup over. Cover with top crust, trim, crimp. Freeze 30 minutes while oven heats to 400°F.",
+    "Brush with egg wash, sprinkle flaky salt and turbinado sugar. Bake 30 minutes, rotate, reduce to 350°F, bake another 1.5 hours. Cool at least 2 hours before slicing."
+  ]}
+  tags={["food52", "macerated", "all-butter"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Truly Scrumptious Apple Pie"
+  description="Food52. Three apple varieties layered separately — Granny Smith, Golden Delicious, Macintosh — for a filling with distinct textural zones."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "630 grams unbleached all-purpose flour (about 5 cups)",
+    "2 1/2 teaspoon kosher salt",
+    "11 ounce very cold unsalted butter, cut into small cubes",
+    "6 ounce very cold vegetable shortening, cut into chunks",
+    "About 1/2 cup ice water",
+    "2 chilled pie dough disks",
+    "3/4 cup granulated sugar, plus extra for decorating",
+    "1/4 cup flour",
+    "1/2 teaspoon fresh grated nutmeg",
+    "1/4 teaspoon ground cinnamon",
+    "2 cup Granny Smith apples, peeled, cored and sliced thin",
+    "2 cup Golden Delicious apples, peeled, cored and sliced thin",
+    "2 cup Macintosh apples, peeled, cored and sliced thin",
+    "3 wedges of fresh lemon",
+    "2 tablespoon unsalted butter",
+    "2 tablespoon cream or milk"
+  ]}
+  steps={[
+    "In a stand mixer, combine flour and salt. Add cold butter, mix until crumbly. Add shortening, then ice water until dough just comes together. Divide into 4 disks, chill 2 hours.",
+    "Mix dry filling ingredients. Toss each apple variety separately with lemon juice and divide the sugar mixture evenly.",
+    "Roll bottom crust, place in 9-inch pan. Layer Granny Smith, then Golden Delicious, then Macintosh. Dot with butter.",
+    "Cover with top crust, flute edges, brush with cream, sprinkle sugar. Bake at 425°F for 40–50 minutes until bubbling."
+  ]}
+  tags={["food52", "three-apple", "layered"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Old-Fashioned Deep Dish Apple Pie"
+  description="Food52. Apple-juice-thickened filling — the liquid gets cooked into the filling rather than macerating out. Results in an intensely apple-flavored sauce."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "Dough for a 9-inch double crust pie, chilled",
+    "2 large egg whites",
+    "2 teaspoon water",
+    "4 to 5 medium sweet apples such as Fuji, Braeburn, Gala, or Jonathan",
+    "2 to 3 tart apples such as Granny Smith or Pippin",
+    "4 tablespoon cornstarch",
+    "1 tablespoon all-purpose flour",
+    "1/2 teaspoon ground cinnamon",
+    "1/4 teaspoon ground nutmeg",
+    "1/2 teaspoon salt",
+    "1 cup apple juice or apple cider",
+    "1/2 teaspoon vanilla",
+    "1 teaspoon freshly squeezed lemon juice",
+    "Coarse sugar such as Turbinado, Raw, or Demerara"
+  ]}
+  steps={[
+    "Set rack to lowest position, preheat to 400°F. Roll out bottom crust, brush with egg white wash.",
+    "Peel and core apples. Cut sweet apples into chunks, tart apples into thin slices.",
+    "Combine sugar, cornstarch, flour, spices, salt in a saucepan with apple juice and vanilla. Bring to a boil until thick. Stir in apples.",
+    "Fill bottom crust, add top crust, vent, brush with egg wash, sprinkle coarse sugar.",
+    "Bake 60–75 minutes until golden and bubbling. Cool 2–3 hours before slicing."
+  ]}
+  tags={["food52", "deep-dish", "apple-cider"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Best-Ever Apple Pie"
+  description="Bon Appétit. The most technically elaborate of the twelve — reduces unfiltered apple cider with vanilla bean, adds cardamom and allspice to the spice blend, calls for a 2-hour bake."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "3½ cups (438g) all-purpose flour",
+    "2 Tbsp. granulated sugar",
+    "1½ tsp. kosher salt",
+    "1½ cups (3 sticks) chilled unsalted butter, cut into pieces",
+    "2 Tbsp. apple cider vinegar",
+    "4 lb. Pink Lady or other firm, sweet-tart apples, peeled, cored, thinly sliced",
+    "⅓ cup (packed) dark brown sugar",
+    "¼ cup granulated sugar",
+    "2 Tbsp. fresh lemon juice",
+    "2 tsp. ground cinnamon",
+    "½ tsp. kosher salt",
+    "¼ tsp. ground allspice",
+    "¼ tsp. ground cardamom",
+    "All-purpose flour (for surface)",
+    "1½ cups unfiltered apple cider",
+    "1 vanilla bean, split lengthwise",
+    "2 Tbsp. cornstarch",
+    "1 large egg",
+    "2 Tbsp. chilled unsalted butter, cut into pieces",
+    "Demerara sugar (for sprinkling)",
+    "Whipped cream or vanilla ice cream (optional)"
+  ]}
+  steps={[
+    "Pulse flour, sugar, and salt in food processor. Add butter, process until pea-size. Transfer to bowl, drizzle apple cider vinegar + ice water, mix until shaggy. Press into disks, chill 2 hours.",
+    "Toss apples with sugars, lemon juice, cinnamon, salt, allspice, and cardamom. Let sit 1–3 hours.",
+    "Reduce 1½ cups apple cider with vanilla bean to ⅓ cup. Add accumulated apple juices, reduce further. Stir in cornstarch slurry until thick. Toss over apples.",
+    "Line pie dish, fill with apples, dot with butter, cover with top crust, crimp, egg wash, demerara sugar. Freeze 10 minutes.",
+    "Bake at 375°F for 1.5–2 hours until deep golden and bubbling. Cool 4 hours before serving."
+  ]}
+  tags={["bon-appetit", "apple-cider", "vanilla-bean", "cardamom"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Apple–Brown Sugar Pie"
+  description="Bon Appétit. Roasts the apples on sheet pans before filling — a step that collapses raw volume, concentrates flavor, and prevents the dreaded gap between crust and filling."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "1½ teaspoons kosher salt",
+    "2¾ cups all-purpose flour, plus more",
+    "14 tablespoons (1¾ sticks) chilled unsalted butter, cut into pieces",
+    "⅓ cup chilled shortening, cut into pieces",
+    "4 pounds Granny Smith apples, peeled, sliced into ½-inch wedges",
+    "1 cup plus 2 tablespoons granulated sugar",
+    "¼ cup plus 1 heaping tablespoon all-purpose flour, plus more",
+    "½ cup (1 stick) unsalted butter, cut into pieces, room temperature",
+    "½ cup (packed) light brown sugar",
+    "1 teaspoon ground cinnamon",
+    "1 large egg, beaten to blend",
+    "Lightly sweetened crème fraîche or whipped cream (for serving)"
+  ]}
+  steps={[
+    "Make crust: combine flour, salt, butter, shortening in stand mixer. Drizzle ice water until dough just comes together. Divide into disks, chill 2 hours.",
+    "Preheat to 350°F. Toss apples with 1 cup sugar and ¼ cup flour, spread on two sheet pans, roast 25–30 minutes until just tender. Cool.",
+    "Transfer apples to bowl with butter, brown sugar, cinnamon, and remaining flour. Chill 1 hour.",
+    "Roll out crust, line pie dish. Fill with roasted apples. Top with second crust, crimp, vent, egg wash, sprinkle with remaining sugar. Freeze 30 minutes.",
+    "Bake at 400°F for 30 minutes, reduce to 350°F, bake 50–60 more minutes. Cool 4 hours."
+  ]}
+  tags={["bon-appetit", "roasted-apples", "crème-fraîche"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Naked Apple Tart"
+  description="Bon Appétit. No filling — just apples, brown butter, lemon, and a whisper of sugar in a tart shell. The most restrained recipe in the set."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "1 tsp. sugar",
+    "½ tsp. kosher salt",
+    "1 cup plus 2 Tbsp. all-purpose flour, plus more for dusting",
+    "½ cup (1 stick) chilled unsalted butter, cut into 6 pieces",
+    "4 Tbsp. chilled unsalted butter (for brown butter)",
+    "2 lb. firm sweet-tart apples, such as Pink Lady (3–4 medium)",
+    "1 Tbsp. fresh lemon juice",
+    "2 tsp. sugar",
+    "Pinch of kosher salt",
+    "Crème fraîche, sour cream, whipped cream, or vanilla ice cream (optional)"
+  ]}
+  steps={[
+    "Make rough puff dough: toss flour, sugar, salt with butter. Roll, fold, repeat three times. Form into disk, chill 30 minutes.",
+    "Line tart pan, shear excess dough. Chill.",
+    "Brown 4 Tbsp. butter until nutty and amber.",
+    "Core apples, slice crosswise into rings (unpeeled). Toss with lemon juice, sugar, salt. Arrange in crust in concentric circles.",
+    "Brush with all the brown butter. Bake at 400°F for 55–65 minutes until deep golden. Cool, remove ring, serve with crème fraîche."
+  ]}
+  tags={["bon-appetit", "brown-butter", "tart", "minimal"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Homemade Apple Pie"
+  description="BBC Good Food. A British approach — Bramley apples (which cook down to a fluffier, more tart purée than American varieties), and a pastry made with whole eggs rather than water."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="6 servings"
+  ingredients={[
+    "1kg Bramley apples",
+    "140g golden caster sugar",
+    "½ tsp cinnamon",
+    "3 tbsp flour",
+    "225g butter room temperature",
+    "50g golden caster sugar plus extra",
+    "2 eggs",
+    "350g plain flour preferably organic",
+    "softly whipped cream to serve"
+  ]}
+  steps={[
+    "Quarter, core, peel and slice apples about 5mm thick. Lay on paper-towel-lined baking sheet to dry while you make pastry.",
+    "Beat butter and sugar until just mixed. Add whole egg and yolk. Work in flour a third at a time. Form into ball, chill 45 minutes.",
+    "Heat oven to 190°C. Roll out two-thirds of pastry, line 20–22cm pie tin. Mix filling sugar, cinnamon, and flour; toss with dried apples.",
+    "Pile filling into pastry-lined tin. Brush rim with water, lay pastry lid over, seal, trim, slash, egg-white wash, sprinkle caster sugar.",
+    "Bake 40–45 minutes until golden. Rest 5–10 minutes, sprinkle more sugar. Serve warm with whipped cream."
+  ]}
+  tags={["bbc", "bramley", "egg-pastry", "british"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Deep-Filled Bramley Apple Pie"
+  description="BBC Good Food. Sultanas soaked in brandy, all-butter shortcrust, springform tin. The sultanas are the ingredient that sends this furthest from the American archetype."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "200g sultanas",
+    "5 tbsp brandy",
+    "plain flour for dusting",
+    "750g all-butter shortcrust pastry",
+    "5 medium Bramley apples peeled, cored and finely sliced",
+    "140g golden caster sugar",
+    "¼ tsp each ground cinnamon, nutmeg and allspice",
+    "1 egg beaten with a splash of milk",
+    "vanilla ice cream or clotted cream, to serve"
+  ]}
+  steps={[
+    "Soak sultanas in brandy, microwave until warm and plump.",
+    "Roll out two-thirds of pastry, line a 23cm springform tin with overhang. Chill.",
+    "Toss apples with sultanas, most of the sugar, and spices. Arrange in tin.",
+    "Cut remaining pastry into a circle, cover apples, tuck sides, pinch overhang to seal. Egg wash, pierce, scatter remaining sugar.",
+    "Bake at 200°C for 30–35 minutes until golden. Cool 1 hour in tin before releasing."
+  ]}
+  tags={["bbc", "bramley", "sultanas", "brandy", "springform"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Spiced Apple Pie"
+  description="BBC Good Food. The simplest recipe in the set — seven ingredients, cardamom pods cracked fresh, shop-bought shortcrust. Proof that the concept scales down."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="6 servings"
+  ingredients={[
+    "1½kg apple (Braeburns or Granny Smiths)",
+    "Squeeze lemon juice",
+    "2 cardamom pods or pinch of ground",
+    "2 tbsp flour plus extra for rolling",
+    "25g golden caster sugar plus extra for sprinkling",
+    "500g pack shortcrust pastry",
+    "2 tbsp milk"
+  ]}
+  steps={[
+    "Heat oven to 220°C. Peel, core, quarter apples, slice 1cm thick. Toss with lemon juice, pat dry. Crack cardamom pods, grind seeds, mix with apples, flour, and sugar.",
+    "Roll out larger piece of pastry to 28cm, line 22cm pie dish.",
+    "Pile in apples, brush rim with milk, place pastry lid, seal, trim, crimp.",
+    "Slash top, milk wash, sprinkle sugar. Bake 20 minutes at 220°C, reduce to 190°C, bake 50 minutes more."
+  ]}
+  tags={["bbc", "cardamom", "simple", "shop-bought-pastry"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Apple Pie by Grandma Ople"
+  description="AllRecipes. The most-rated apple pie on the internet. The twist: a butter-sugar caramel sauce poured directly over the lattice crust before baking, seeping into the filling as it sets."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "8 small Granny Smith apples, or as needed",
+    "½ cup unsalted butter",
+    "3 tablespoons all-purpose flour",
+    "½ cup white sugar",
+    "½ cup packed brown sugar",
+    "¼ cup water",
+    "1 (9 inch) double-crust pie pastry, thawed"
+  ]}
+  steps={[
+    "Preheat oven to 425°F (220°C). Peel, core, and thinly slice apples. Set aside.",
+    "Melt butter in a saucepan over medium heat. Add flour and stir to form a paste; cook until fragrant, 1–2 minutes. Add both sugars and water; bring to a boil. Reduce heat and simmer 3–5 minutes. Remove from heat.",
+    "Press one pastry into a 9-inch pie pan. Roll out remaining pastry and cut into eight 1-inch strips.",
+    "Pile sliced apples into bottom crust. Weave pastry strips into a lattice over the top.",
+    "Slowly pour the sugar-butter mixture over the lattice, letting it seep into the apples. Bake 15 minutes at 425°F, then reduce to 350°F and bake 35–45 minutes more until apples are soft."
+  ]}
+  tags={["allrecipes", "lattice", "caramel-sauce", "grandma-ople"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Chef John's Caramel Apple Pie"
+  description="AllRecipes. Similar caramel-over-lattice technique to Grandma Ople's, but Chef John's version reduces the sauce further and specifies Gala or Granny Smith or a mix — the apple variety is acknowledged as a variable."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "½ cup white sugar",
+    "½ cup brown sugar",
+    "6 tablespoons unsalted butter",
+    "¼ cup water",
+    "¼ teaspoon cinnamon",
+    "1 pinch salt",
+    "1 (14.1-ounce) package pastry for a double-crust (9-inch) pie",
+    "5 apples — peeled, cored, and sliced"
+  ]}
+  steps={[
+    "Preheat oven to 425°F (220°C).",
+    "Combine both sugars, butter, water, cinnamon, and salt in a saucepan. Bring to a boil, remove from heat, set aside.",
+    "Line pie plate with one crust. Fill with apple slices. Cut top crust into 8 strips and weave into a lattice. Fold and crimp edges.",
+    "Pour butter-sugar mixture evenly over the lattice.",
+    "Bake 15 minutes at 425°F, reduce to 350°F, bake 35–40 minutes more until golden and bubbling. Cool completely before slicing."
+  ]}
+  tags={["allrecipes", "lattice", "caramel-sauce", "chef-john"]}
+/>
+
+<RecipeCard
+  client:load
+  title="Easy Apple Pie"
+  description="AllRecipes. The most stripped-back recipe in the set — six ingredients plus an optional egg wash. No technique, no maceration, no reduction. Layers of apples, cinnamon sugar, a dot of butter, and a lid."
+  prepTime=""
+  cookTime=""
+  totalTime=""
+  servings="8 servings"
+  ingredients={[
+    "1 (14.1 ounce) package pastry for a 9-inch double-crust pie",
+    "¾ cup white sugar, or more to taste",
+    "1 teaspoon ground cinnamon",
+    "6 cups thinly sliced apples",
+    "1 tablespoon butter",
+    "1 egg (optional)",
+    "1 tablespoon water (optional)"
+  ]}
+  steps={[
+    "Preheat oven to 450°F (230°C). Line pie dish with bottom crust.",
+    "Combine sugar and cinnamon. Layer apple slices in pie dish, sprinkling each layer with cinnamon-sugar.",
+    "Dot top layer with butter pieces. Cover with top crust, flute edges to seal.",
+    "Optional: beat egg with water and brush over crust. Cut slits in top to vent.",
+    "Bake on lowest rack 10 minutes at 450°F, reduce to 350°F, bake 30–35 minutes more until golden and filling bubbles."
+  ]}
+  tags={["allrecipes", "simple", "six-ingredients"]}
+/>
+
+---
+
+## The Embedding Visualization
+
+121 ingredient-recipe pairs across 12 recipes (same ingredient appearing in multiple recipes shows up as multiple points, one per recipe). Each point is one normalized ingredient string, embedded with `BAAI/bge-small-en-v1.5` (384 dimensions, ONNX, no API key) and reduced to 2D with UMAP using cosine distance. Hover to see the ingredient name and its recipe.
+
+<CalloutBox type="info" title="How to read this plot">
+Points that are close together have similar semantic embeddings — the model associates them with similar contexts in food writing. Tight clusters mean ingredients that play the same conceptual role across recipes.
+</CalloutBox>
+
+<EmbeddingScatterPlot
+  client:load
+  title="Ingredient Embedding Space — 12 Apple Pie Recipes"
+  caption="2D UMAP projection (cosine metric in 384-dim space, n_neighbors=5, min_dist=0.2) of BAAI/bge-small-en-v1.5 embeddings for 121 ingredient strings across 12 recipes from Food52, Bon Appétit, BBC Good Food, and AllRecipes."
+  showLegend={true}
+  legendItems={[
+    { label: "Apple Pie by Grandma Ople", color: "#f59e0b" },
+    { label: "Chef John's Caramel Apple Pie", color: "#3b82f6" },
+    { label: "Easy Apple Pie", color: "#ef4444" },
+    { label: "Apple Pie (Food52)", color: "#10b981" },
+    { label: "Truly Scrumptious Apple Pie", color: "#a78bfa" },
+    { label: "Old-Fashioned Deep Dish Apple Pie", color: "#f97316" },
+    { label: "Best-Ever Apple Pie", color: "#8b5cf6" },
+    { label: "Apple–Brown Sugar Pie", color: "#06b6d4" },
+    { label: "Naked Apple Tart", color: "#ec4899" },
+    { label: "Homemade apple pie (BBC)", color: "#84cc16" },
+    { label: "Deep-filled Bramley apple pie", color: "#f59e0b" },
+    { label: "Spiced apple pie", color: "#3b82f6" },
+  ]}
+  points={[
+    { id: "app_granny_s", label: "granny smith apples", recipe: "Apple Pie by Grandma Ople", x: 0.086, y: 0.864, color: "#f59e0b" },
+    { id: "app_unsalted", label: "unsalted butter", recipe: "Apple Pie by Grandma Ople", x: -0.327, y: -0.481, color: "#f59e0b" },
+    { id: "app_flour", label: "flour", recipe: "Apple Pie by Grandma Ople", x: 0.366, y: -0.187, color: "#f59e0b" },
+    { id: "app_white_su", label: "white sugar", recipe: "Apple Pie by Grandma Ople", x: -0.687, y: -0.83, color: "#f59e0b" },
+    { id: "app_brown_su", label: "brown sugar", recipe: "Apple Pie by Grandma Ople", x: -0.578, y: -0.919, color: "#f59e0b" },
+    { id: "app_water", label: "water", recipe: "Apple Pie by Grandma Ople", x: -0.989, y: -0.077, color: "#f59e0b" },
+    { id: "app_pie_past", label: "pie pastry", recipe: "Apple Pie by Grandma Ople", x: 0.739, y: 0.056, color: "#f59e0b" },
+    { id: "che_white_su", label: "white sugar", recipe: "Chef John's Caramel Apple Pie", x: -0.687, y: -0.83, color: "#3b82f6" },
+    { id: "che_brown_su", label: "brown sugar", recipe: "Chef John's Caramel Apple Pie", x: -0.578, y: -0.919, color: "#3b82f6" },
+    { id: "che_unsalted", label: "unsalted butter", recipe: "Chef John's Caramel Apple Pie", x: -0.327, y: -0.481, color: "#3b82f6" },
+    { id: "che_water", label: "water", recipe: "Chef John's Caramel Apple Pie", x: -0.989, y: -0.077, color: "#3b82f6" },
+    { id: "che_cinnamon", label: "cinnamon", recipe: "Chef John's Caramel Apple Pie", x: -0.187, y: -0.017, color: "#3b82f6" },
+    { id: "che_salt", label: "salt", recipe: "Chef John's Caramel Apple Pie", x: -0.846, y: 0.068, color: "#3b82f6" },
+    { id: "che_pastry", label: "pastry", recipe: "Chef John's Caramel Apple Pie", x: 0.523, y: 0.064, color: "#3b82f6" },
+    { id: "che_apples", label: "apples", recipe: "Chef John's Caramel Apple Pie", x: -0.241, y: 0.796, color: "#3b82f6" },
+    { id: "eas_pastry", label: "pastry", recipe: "Easy Apple Pie", x: 0.523, y: 0.064, color: "#ef4444" },
+    { id: "eas_white_su", label: "white sugar", recipe: "Easy Apple Pie", x: -0.687, y: -0.83, color: "#ef4444" },
+    { id: "eas_cinnamon", label: "cinnamon", recipe: "Easy Apple Pie", x: -0.187, y: -0.017, color: "#ef4444" },
+    { id: "eas_apples", label: "apples", recipe: "Easy Apple Pie", x: -0.241, y: 0.796, color: "#ef4444" },
+    { id: "eas_butter", label: "butter", recipe: "Easy Apple Pie", x: -0.439, y: -0.355, color: "#ef4444" },
+    { id: "eas_egg", label: "egg", recipe: "Easy Apple Pie", x: -0.858, y: -0.225, color: "#ef4444" },
+    { id: "eas_water", label: "water", recipe: "Easy Apple Pie", x: -0.989, y: -0.077, color: "#ef4444" },
+    { id: "app_tart", label: "tart", recipe: "Apple Pie", x: 0.445, y: 0.288, color: "#10b981" },
+    { id: "app_granulat", label: "granulated sugar", recipe: "Apple Pie", x: -0.161, y: -0.871, color: "#10b981" },
+    { id: "app_light_br", label: "light brown sugar", recipe: "Apple Pie", x: -0.694, y: -0.944, color: "#10b981" },
+    { id: "app_allspice", label: "allspice or cinnamon", recipe: "Apple Pie", x: -0.166, y: 0.102, color: "#10b981" },
+    { id: "app_freshly_", label: "freshly black pepper or cardamom", recipe: "Apple Pie", x: -0.42, y: 0.33, color: "#10b981" },
+    { id: "app_kosher_s", label: "kosher salt", recipe: "Apple Pie", x: -0.76, y: 0.129, color: "#10b981" },
+    { id: "app_lemon", label: "lemon", recipe: "Apple Pie", x: -0.77, y: 0.38, color: "#10b981" },
+    { id: "app_cornstar", label: "cornstarch", recipe: "Apple Pie", x: -0.452, y: -0.495, color: "#10b981" },
+    { id: "app_quantity", label: "quantity allbutter pie dough", recipe: "Apple Pie", x: 0.787, y: -0.003, color: "#10b981" },
+    { id: "app_egg_yolk", label: "egg yolk", recipe: "Apple Pie", x: -0.749, y: -0.266, color: "#10b981" },
+    { id: "app_flaky_sa", label: "flaky salt and turbinado sugar", recipe: "Apple Pie", x: -0.401, y: -0.784, color: "#10b981" },
+    { id: "tru_flour", label: "flour", recipe: "Truly Scrumptious Apple Pie", x: 0.366, y: -0.187, color: "#a78bfa" },
+    { id: "tru_kosher_s", label: "kosher salt", recipe: "Truly Scrumptious Apple Pie", x: -0.76, y: 0.129, color: "#a78bfa" },
+    { id: "tru_unsalted", label: "unsalted butter", recipe: "Truly Scrumptious Apple Pie", x: -0.327, y: -0.481, color: "#a78bfa" },
+    { id: "tru_vegetabl", label: "vegetable shortening", recipe: "Truly Scrumptious Apple Pie", x: 0.982, y: -0.252, color: "#a78bfa" },
+    { id: "tru_ice_wate", label: "ice water", recipe: "Truly Scrumptious Apple Pie", x: -1.0, y: -0.112, color: "#a78bfa" },
+    { id: "tru_pie_doug", label: "pie dough disks", recipe: "Truly Scrumptious Apple Pie", x: 1.0, y: 0.052, color: "#a78bfa" },
+    { id: "tru_granulat", label: "granulated sugar", recipe: "Truly Scrumptious Apple Pie", x: -0.161, y: -0.871, color: "#a78bfa" },
+    { id: "tru_nutmeg", label: "nutmeg", recipe: "Truly Scrumptious Apple Pie", x: 0.272, y: 0.208, color: "#a78bfa" },
+    { id: "tru_cinnamon", label: "cinnamon", recipe: "Truly Scrumptious Apple Pie", x: -0.187, y: -0.017, color: "#a78bfa" },
+    { id: "tru_granny_s", label: "granny smith apples", recipe: "Truly Scrumptious Apple Pie", x: 0.086, y: 0.864, color: "#a78bfa" },
+    { id: "tru_golden_d", label: "golden delicious apples", recipe: "Truly Scrumptious Apple Pie", x: -0.153, y: 0.83, color: "#a78bfa" },
+    { id: "tru_macintos", label: "macintosh apples", recipe: "Truly Scrumptious Apple Pie", x: -0.262, y: 1.0, color: "#a78bfa" },
+    { id: "tru_wedges_l", label: "wedges lemon", recipe: "Truly Scrumptious Apple Pie", x: -0.526, y: 0.437, color: "#a78bfa" },
+    { id: "tru_cream_or", label: "cream or milk", recipe: "Truly Scrumptious Apple Pie", x: -0.341, y: -0.258, color: "#a78bfa" },
+    { id: "old_dough", label: "dough", recipe: "Old-Fashioned Deep Dish Apple Pie", x: 0.35, y: -0.054, color: "#f97316" },
+    { id: "old_egg_whit", label: "egg whites", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.863, y: -0.36, color: "#f97316" },
+    { id: "old_water", label: "water", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.989, y: -0.077, color: "#f97316" },
+    { id: "old_to_sweet", label: "to sweet apples fuji", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.32, y: 0.921, color: "#f97316" },
+    { id: "old_to_tart_", label: "to tart apples granny smith or pippin", recipe: "Old-Fashioned Deep Dish Apple Pie", x: 0.152, y: 0.734, color: "#f97316" },
+    { id: "old_cornstar", label: "cornstarch", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.452, y: -0.495, color: "#f97316" },
+    { id: "old_flour", label: "flour", recipe: "Old-Fashioned Deep Dish Apple Pie", x: 0.366, y: -0.187, color: "#f97316" },
+    { id: "old_cinnamon", label: "cinnamon", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.187, y: -0.017, color: "#f97316" },
+    { id: "old_nutmeg", label: "nutmeg", recipe: "Old-Fashioned Deep Dish Apple Pie", x: 0.272, y: 0.208, color: "#f97316" },
+    { id: "old_salt", label: "salt", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.846, y: 0.068, color: "#f97316" },
+    { id: "old_apple_ci", label: "apple cider", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.351, y: 0.671, color: "#f97316" },
+    { id: "old_vanilla", label: "vanilla", recipe: "Old-Fashioned Deep Dish Apple Pie", x: 0.113, y: -0.171, color: "#f97316" },
+    { id: "old_freshly_", label: "freshly lemon juice", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.873, y: 0.442, color: "#f97316" },
+    { id: "old_coarse_s", label: "coarse sugar turbinado", recipe: "Old-Fashioned Deep Dish Apple Pie", x: -0.424, y: -0.923, color: "#f97316" },
+    { id: "bes_flour", label: "flour", recipe: "Best-Ever Apple Pie", x: 0.366, y: -0.187, color: "#8b5cf6" },
+    { id: "bes_granulat", label: "granulated sugar", recipe: "Best-Ever Apple Pie", x: -0.161, y: -0.871, color: "#8b5cf6" },
+    { id: "bes_kosher_s", label: "kosher salt", recipe: "Best-Ever Apple Pie", x: -0.76, y: 0.129, color: "#8b5cf6" },
+    { id: "bes_unsalted", label: "unsalted butter", recipe: "Best-Ever Apple Pie", x: -0.327, y: -0.481, color: "#8b5cf6" },
+    { id: "bes_apple_ci", label: "apple cider vinegar", recipe: "Best-Ever Apple Pie", x: -0.563, y: 0.643, color: "#8b5cf6" },
+    { id: "bes_pink_lad", label: "pink lady or other", recipe: "Best-Ever Apple Pie", x: -0.524, y: -0.124, color: "#8b5cf6" },
+    { id: "bes_dark_bro", label: "dark brown sugar", recipe: "Best-Ever Apple Pie", x: -0.509, y: -0.854, color: "#8b5cf6" },
+    { id: "bes_lemon_ju", label: "lemon juice", recipe: "Best-Ever Apple Pie", x: -0.923, y: 0.41, color: "#8b5cf6" },
+    { id: "bes_cinnamon", label: "cinnamon", recipe: "Best-Ever Apple Pie", x: -0.187, y: -0.017, color: "#8b5cf6" },
+    { id: "bes_allspice", label: "allspice", recipe: "Best-Ever Apple Pie", x: -0.324, y: 0.101, color: "#8b5cf6" },
+    { id: "bes_cardamom", label: "cardamom", recipe: "Best-Ever Apple Pie", x: -0.059, y: 0.337, color: "#8b5cf6" },
+    { id: "bes_apple_ci", label: "apple cider", recipe: "Best-Ever Apple Pie", x: -0.351, y: 0.671, color: "#8b5cf6" },
+    { id: "bes_vanilla_", label: "vanilla bean", recipe: "Best-Ever Apple Pie", x: -0.003, y: -0.112, color: "#8b5cf6" },
+    { id: "bes_cornstar", label: "cornstarch", recipe: "Best-Ever Apple Pie", x: -0.452, y: -0.495, color: "#8b5cf6" },
+    { id: "bes_egg", label: "egg", recipe: "Best-Ever Apple Pie", x: -0.858, y: -0.225, color: "#8b5cf6" },
+    { id: "bes_demerara", label: "demerara sugar", recipe: "Best-Ever Apple Pie", x: -0.477, y: -1.0, color: "#8b5cf6" },
+    { id: "bes_whipped_", label: "whipped ice cream", recipe: "Best-Ever Apple Pie", x: 0.065, y: -0.34, color: "#8b5cf6" },
+    { id: "bes_deep_pie", label: "deep pie dish", recipe: "Best-Ever Apple Pie", x: 0.836, y: 0.1, color: "#8b5cf6" },
+    { id: "app_kosher_s", label: "kosher salt", recipe: "Apple–Brown Sugar Pie", x: -0.76, y: 0.129, color: "#06b6d4" },
+    { id: "app_flour", label: "flour", recipe: "Apple–Brown Sugar Pie", x: 0.366, y: -0.187, color: "#06b6d4" },
+    { id: "app_unsalted", label: "unsalted butter", recipe: "Apple–Brown Sugar Pie", x: -0.327, y: -0.481, color: "#06b6d4" },
+    { id: "app_shorteni", label: "shortening", recipe: "Apple–Brown Sugar Pie", x: 0.846, y: -0.269, color: "#06b6d4" },
+    { id: "app_granny_s", label: "granny smith apples", recipe: "Apple–Brown Sugar Pie", x: 0.086, y: 0.864, color: "#06b6d4" },
+    { id: "app_granulat", label: "granulated sugar", recipe: "Apple–Brown Sugar Pie", x: -0.161, y: -0.871, color: "#06b6d4" },
+    { id: "app_light_br", label: "light brown sugar", recipe: "Apple–Brown Sugar Pie", x: -0.694, y: -0.944, color: "#06b6d4" },
+    { id: "app_cinnamon", label: "cinnamon", recipe: "Apple–Brown Sugar Pie", x: -0.187, y: -0.017, color: "#06b6d4" },
+    { id: "app_egg", label: "egg", recipe: "Apple–Brown Sugar Pie", x: -0.858, y: -0.225, color: "#06b6d4" },
+    { id: "app_sweetene", label: "sweetened crème cream", recipe: "Apple–Brown Sugar Pie", x: 0.097, y: -0.481, color: "#06b6d4" },
+    { id: "nak_sugar", label: "sugar", recipe: "Naked Apple Tart", x: -0.167, y: -0.94, color: "#ec4899" },
+    { id: "nak_kosher_s", label: "kosher salt", recipe: "Naked Apple Tart", x: -0.76, y: 0.129, color: "#ec4899" },
+    { id: "nak_flour", label: "flour", recipe: "Naked Apple Tart", x: 0.366, y: -0.187, color: "#ec4899" },
+    { id: "nak_unsalted", label: "unsalted butter", recipe: "Naked Apple Tart", x: -0.327, y: -0.481, color: "#ec4899" },
+    { id: "nak_sweettar", label: "sweettart apples", recipe: "Naked Apple Tart", x: -0.341, y: 0.887, color: "#ec4899" },
+    { id: "nak_lemon_ju", label: "lemon juice", recipe: "Naked Apple Tart", x: -0.923, y: 0.41, color: "#ec4899" },
+    { id: "nak_crème_fr", label: "crème fraîche", recipe: "Naked Apple Tart", x: 0.224, y: -0.353, color: "#ec4899" },
+    { id: "nak_tart_pan", label: "tart pan with removable bottom", recipe: "Naked Apple Tart", x: 0.877, y: 0.173, color: "#ec4899" },
+    { id: "hom_bramley_", label: "bramley apples", recipe: "Homemade apple pie", x: -0.015, y: 0.895, color: "#84cc16" },
+    { id: "hom_golden_c", label: "golden caster sugar", recipe: "Homemade apple pie", x: -0.72, y: -0.882, color: "#84cc16" },
+    { id: "hom_cinnamon", label: "cinnamon", recipe: "Homemade apple pie", x: -0.187, y: -0.017, color: "#84cc16" },
+    { id: "hom_flour", label: "flour", recipe: "Homemade apple pie", x: 0.366, y: -0.187, color: "#84cc16" },
+    { id: "hom_butter", label: "butter", recipe: "Homemade apple pie", x: -0.439, y: -0.355, color: "#84cc16" },
+    { id: "hom_eggs", label: "eggs", recipe: "Homemade apple pie", x: -0.945, y: -0.329, color: "#84cc16" },
+    { id: "hom_plain_fl", label: "plain flour organic", recipe: "Homemade apple pie", x: 0.483, y: -0.205, color: "#84cc16" },
+    { id: "hom_whipped_", label: "whipped cream", recipe: "Homemade apple pie", x: -0.094, y: -0.419, color: "#84cc16" },
+    { id: "dee_sultana", label: "sultana", recipe: "Deep-filled Bramley apple pie", x: -0.184, y: 0.496, color: "#f59e0b" },
+    { id: "dee_brandy", label: "brandy", recipe: "Deep-filled Bramley apple pie", x: 0.594, y: 0.197, color: "#f59e0b" },
+    { id: "dee_plain_fl", label: "plain flour", recipe: "Deep-filled Bramley apple pie", x: 0.621, y: -0.208, color: "#f59e0b" },
+    { id: "dee_allbutte", label: "allbutter shortcrust pastry", recipe: "Deep-filled Bramley apple pie", x: 0.774, y: -0.087, color: "#f59e0b" },
+    { id: "dee_bramley_", label: "bramley apples", recipe: "Deep-filled Bramley apple pie", x: -0.015, y: 0.895, color: "#f59e0b" },
+    { id: "dee_golden_c", label: "golden caster sugar", recipe: "Deep-filled Bramley apple pie", x: -0.72, y: -0.882, color: "#f59e0b" },
+    { id: "dee_each_cin", label: "each cinnamon", recipe: "Deep-filled Bramley apple pie", x: 0.094, y: 0.026, color: "#f59e0b" },
+    { id: "dee_egg", label: "egg", recipe: "Deep-filled Bramley apple pie", x: -0.858, y: -0.225, color: "#f59e0b" },
+    { id: "dee_vanilla_", label: "vanilla ice cream", recipe: "Deep-filled Bramley apple pie", x: 0.035, y: -0.294, color: "#f59e0b" },
+    { id: "spi_apple", label: "apple", recipe: "Spiced apple pie", x: -0.102, y: 0.924, color: "#3b82f6" },
+    { id: "spi_squeeze_", label: "squeeze lemon juice", recipe: "Spiced apple pie", x: -0.893, y: 0.493, color: "#3b82f6" },
+    { id: "spi_cardamom", label: "cardamom pods", recipe: "Spiced apple pie", x: -0.206, y: 0.299, color: "#3b82f6" },
+    { id: "spi_flour", label: "flour", recipe: "Spiced apple pie", x: 0.366, y: -0.187, color: "#3b82f6" },
+    { id: "spi_golden_c", label: "golden caster sugar", recipe: "Spiced apple pie", x: -0.72, y: -0.882, color: "#3b82f6" },
+    { id: "spi_pack_sho", label: "pack shortcrust pastry", recipe: "Spiced apple pie", x: 0.936, y: -0.079, color: "#3b82f6" },
+    { id: "spi_milk", label: "milk", recipe: "Spiced apple pie", x: -0.551, y: -0.199, color: "#3b82f6" }
+  ]}
+/>
+
+---
+
+## What the Clusters Tell Us
+
+The AllRecipes recipes are simpler — fewer ingredients, more generic strings — and they land deep inside existing clusters rather than forming new ones. "Easy Apple Pie" has six ingredients; all six land with the crowd. The simplest recipe is the most redundant, in embedding space.
+
+### Apples and Citrus (top-center)
+
+Every apple variant lands together at the top of the plot: Granny Smith, Golden Delicious, Macintosh, Bramley, "tart apples," "sweet apples," "sweet-tart apples." Lemon juice and lemon squeeze variants cluster along the left edge — citrus travels with fruit. Apple cider lands here too, grouped with fruit rather than with liquids despite functioning as a liquid in recipes.
+
+### Eggs and Water (left)
+
+Water, ice water, egg, egg whites, egg yolk, eggs — all liquid binders and plain water, pulled to the left band. Salt and kosher salt land nearby. Milk clusters here too: in baking prose, milk appears beside eggs far more often than beside cream or spices. This is a structurally coherent group — ingredients that do binding and seasoning work rather than flavoring or structural work.
+
+### Spices and Aromatics (center-left)
+
+Cinnamon, nutmeg, allspice, cardamom, cardamom pods, ground pepper, and salt variants cluster in the center-left band — drawn from multiple recipes, independent of source. The model doesn't know which recipe they came from. It knows these words appear in near-identical contexts in food writing. They're interchangeable to the model in a way they're not to a baker.
+
+The Food52 "Apple Pie" lists "ground allspice or cinnamon" as a single ingredient — the recipe literally treats them as alternatives. In embedding space, they're already neighbors. The recipe and the model agree.
+
+Sultanas land here too. Dried fruit in recipe writing appears in sentences about flavoring and spice — not about fresh fruit. The sultanas traveled with the aromatics, not the apples.
+
+### Butter and Dairy (center)
+
+"Very cold unsalted butter," "unsalted butter," "butter," "vegetable shortening," "cornstarch" — fats and thickeners, grouped in the center of the plot. Cream, crème fraîche, and whipped cream sit at the edges of this zone — dairy fats adjacent to butter in embedding space, as they are in recipe writing.
+
+### Sweeteners (bottom-left)
+
+Granulated sugar, light brown sugar, dark brown sugar, golden caster sugar, white sugar, demerara, turbinado, coarse sugar — all pulled to the bottom-left. British golden caster sugar sits slightly offset from American granulated, reflecting a different semantic footprint in recipe corpora.
+
+### Pastry, Dough, and Flour (right)
+
+The right side is pastry territory: double-crust pastry references, shortcrust pastry, pie dough disks, all-purpose flour, plain flour, "quantity all-butter pie dough." Baking vessels — "deep pie dish," "tart pan with removable bottom" — land at the right edge too. The model has correctly identified baking vessels as belonging to the same structural context as pastry.
+
+### Brandy (center-right, near pastry)
+
+**Brandy** doesn't land with the apples. It doesn't land with the spices, or the sweeteners, or the eggs. It sits center-right, near the pastry and dough cluster — in the structural zone of the recipe rather than the flavoring zone.
+
+This is what the experiment turns on. Brandy is a spirit distilled from fruit, and you might expect it near apples or citrus. Instead it migrates toward pastry and baking — language that describes what you do to construct something, not what you taste. Sultanas, meanwhile, drifted to the spice cluster: dried fruit appears beside aromatics and flavorings in recipe prose more often than beside fresh fruit.
+
+Neither landed where intuition would place them. They landed where language puts them. The model has never tasted brandy. But it has read enough recipes to know which words appear in the same sentences.
+
+<PullQuote
+  quote="Brandy doesn't land with the apples. It lands near pastry and structure — because in English food writing, spirits travel with the thing you build, not the thing you taste."
+  align="center"
+/>
+
+---
+
+## What This Actually Tells Us
+
+The American vs. British divide shows up clearly too. The BBC recipes share Bramley apples, golden caster sugar, and plain flour — a very specific British pantry vocabulary. The American recipes use different words for the same things: "all-purpose flour" vs. "plain flour," "granulated sugar" vs. "caster sugar." In embedding space, these aren't quite the same point. The clusters partly reflect cuisine, not just chemistry.
+
+The Grandma Ople and Chef John recipes share an unusual technique — a butter-sugar caramel sauce poured directly over the unbaked lattice crust. Neither Food52 nor Bon Appétit nor BBC uses this approach. But in ingredient embedding space, there's no separate cluster for it. The technique is invisible; only the ingredients leave a trace. "Brown sugar," "white sugar," "unsalted butter," and "water" all land exactly where you'd expect. The caramel sauce, as a structural idea, doesn't exist in the embedding.
+
+Every ingredient in this dataset was sourced from a recipe written in English, by a food writer, for an audience with particular vocabulary and habits. The model learned from that writing. When it puts brandy near pastry instead of near apples, it's not hallucinating — it's reporting what English-language food writing implies. Which raises a question worth sitting with: if you trained the same model on French recipe corpora, or Japanese, would brandy still land near flour?
+
+Language shapes what we see. Not the food.
+
+---
+
+## A Note on Method
+
+1. Collected 12 recipes from Food52, Bon Appétit, BBC Good Food, and AllRecipes
+2. Extracted ingredient strings, normalized out quantities and measurements
+3. Embedded each unique ingredient using `BAAI/bge-small-en-v1.5` via `fastembed` (384 dimensions, ONNX, fully local — no API key)
+4. Reduced to 2D with UMAP (`cosine` metric, `n_neighbors=5`, `min_dist=0.2`) — UMAP uses cosine distance in the 384-dimensional space to build the neighborhood graph before projecting
+5. Normalized coordinates to [-1, 1] and plotted
+
+The normalization step strips quantities and measurements but isn't perfect — some ingredient strings in the Best-Ever recipe retain measurement prefixes ("tbsp", "tsp", "lb") because the scraper included them without whitespace separation. They still land in the right semantic neighborhoods, but their tooltip labels are ugly.
+
+The scraper also occasionally includes equipment ("a diameter tart pan with removable bottom") or serving suggestions ("softly whipped cream to serve") as ingredient strings. These land in contextually adjacent clusters (equipment near pastry, cream near sweeteners) rather than as isolated outliers — which is itself revealing.
