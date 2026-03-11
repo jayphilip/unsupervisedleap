@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import TableOfContents from '../components/TableOfContents.astro';
+import TableOfContentsSidebar from '../components/TableOfContentsSidebar.svelte';
 import AuthorBio from '../components/AuthorBio.svelte';
 import NewsletterSignup from '../components/NewsletterSignup.svelte';
 import type { CollectionEntry } from 'astro:content';
@@ -27,74 +27,72 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 ---
 
 <BaseLayout {title} {description} isPost ogType="article">
-  <article class="post-single">
-    <header class="post-header">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span aria-hidden="true">»</span>
-        <a href="/posts/">Posts</a>
-        <span aria-hidden="true">»</span>
-        <span>{title}</span>
-      </nav>
-
-      <h1 class="post-title">{title}</h1>
-
-      {description && <p class="post-description">{description}</p>}
-
-      <div class="post-meta">
-        <time datetime={date.toISOString()}>{formattedDate}</time>
-        <span>·</span>
-        <span>{readingTime} min read</span>
-        {categories.length > 0 && (
-          <>
-            <span>·</span>
-            {categories.map((cat) => (
-              <a href={`/categories/${cat.toLowerCase().replace(/ /g, '-')}/`}>{cat}</a>
-            ))}
-          </>
-        )}
-      </div>
-    </header>
-
-    {showToc && <TableOfContents {headings} />}
-
-    <div class="post-content">
-      <slot />
-    </div>
-
-    <AuthorBio />
-
-    <footer class="post-footer">
-      {tags.length > 0 && (
-        <ul class="post-tags">
-          {tags.map((tag) => (
-            <li>
-              <a href={`/tags/${tag.toLowerCase().replace(/ /g, '-')}/`}>{tag}</a>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {(prevPost || nextPost) && (
-        <nav class="post-nav" aria-label="Post navigation">
-          {prevPost ? (
-            <div class="prev-post">
-              <span>← Older</span>
-              <a href={`/posts/${prevPost.slug}/`}>{prevPost.data.title}</a>
-            </div>
-          ) : (
-            <div></div>
-          )}
-          {nextPost && (
-            <div class="next-post">
-              <span>Newer →</span>
-              <a href={`/posts/${nextPost.slug}/`}>{nextPost.data.title}</a>
-            </div>
-          )}
+  <div class="post-layout">
+    <article class="post-single">
+      <header class="post-header">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">»</span>
+          <a href="/posts/">Posts</a>
+          <span aria-hidden="true">»</span>
+          <span>{title}</span>
         </nav>
-      )}
-    </footer>
 
-    <NewsletterSignup client:load />
-  </article>
+        <h1 class="post-title">{title}</h1>
+
+        {description && <p class="post-description">{description}</p>}
+
+        <div class="post-meta">
+          <time datetime={date.toISOString()}>{formattedDate}</time>
+          <span>·</span>
+          <span>{wordCount.toLocaleString()} words</span>
+          <span>·</span>
+          <span>{readingTime} mins</span>
+        </div>
+
+        {tags.length > 0 && (
+          <div class="post-header-tags">
+            {tags.map((tag) => (
+              <a href={`/tags/${tag.toLowerCase().replace(/ /g, '-')}/`} class="post-header-tag">{tag}</a>
+            ))}
+          </div>
+        )}
+
+        <AuthorBio client:load />
+      </header>
+
+      <div class="post-content">
+        <slot />
+      </div>
+
+      <footer class="post-footer">
+        {(prevPost || nextPost) && (
+          <nav class="post-nav" aria-label="Post navigation">
+            {prevPost ? (
+              <div class="prev-post">
+                <span>← Older</span>
+                <a href={`/posts/${prevPost.slug}/`}>{prevPost.data.title}</a>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            {nextPost && (
+              <div class="next-post">
+                <span>Newer →</span>
+                <a href={`/posts/${nextPost.slug}/`}>{nextPost.data.title}</a>
+              </div>
+            )}
+          </nav>
+        )}
+      </footer>
+
+      <NewsletterSignup client:load />
+    </article>
+
+    {showToc && (
+      <aside class="post-sidebar">
+        <TableOfContentsSidebar {headings} client:load />
+      </aside>
+    )}
+  </div>
 </BaseLayout>

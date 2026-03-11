@@ -82,7 +82,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <a href="#main-content" class="skip-link">Skip to content</a>
     {isPost && <ReadingProgress client:load />}
     <Header />
-    <main class="main" id="main-content">
+    <main class={`main${isPost ? ' main--post' : ''}`} id="main-content">
       <slot />
     </main>
     <Footer />

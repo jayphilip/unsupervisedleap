@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Update this date whenever you edit the page
 const lastUpdated = new Date('2026-03-09');
 const formattedDate = lastUpdated.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -10,289 +9,296 @@ const formattedDate = lastUpdated.toLocaleDateString('en-US', {
 });
 ---
 
-<BaseLayout
-  title="Now"
-  description="What Jason Albert is reading, building, thinking about, and working on right now."
->
-  <div class="now-page">
+<!-- VARIANT 3: "Magazine" — large hero text, asymmetric two-column grid, feels alive -->
 
-    <header class="now-header">
-      <div class="now-header-top">
-        <h1>Now</h1>
-        <p class="now-updated">Updated <time datetime={lastUpdated.toISOString()}>{formattedDate}</time></p>
-      </div>
-      <p class="now-sub">
-        A snapshot of what's actually occupying my attention. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">Derek Sivers</a>.
+<BaseLayout title="Now" description="What Jason Albert is working on, reading, and thinking about right now.">
+  <div class="now-v3">
+
+    <header class="v3-header">
+      <p class="v3-kicker">
+        Updated: <time datetime={lastUpdated.toISOString()}>{formattedDate}</time>
+      </p>
+      <h1 class="v3-title">Right now.</h1>
+      <p class="v3-sub">
+        What's actually occupying my attention — not what I think I should be doing.
+        Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener">Derek Sivers</a>.
       </p>
     </header>
 
-    <div class="now-grid">
+    <div class="v3-body">
 
-      <!-- READING -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">📚</span>
-          Reading
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">Open Socrates</span>
-            <span class="now-item-sub">Agnes Callard - a refreshing take on Socrates</span>
-          </li>
-          <li>
-            <span class="now-item-title">Consciousness Explained</span>
-            <span class="now-item-sub">Daniel Dennett — trying to wrap my head around consciousness</span>
-          </li>
-        </ul>
-      </section>
+      <!-- Left column: large featured items -->
+      <div class="v3-col-main">
 
-      <!-- BUILDING -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">🔨</span>
-          Building
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">This site</span>
-            <span class="now-item-sub">Astro + Svelte, deployed on Cloudflare Pages</span>
-          </li>
-          <li>
-            <span class="now-item-title">Writing more consistently</span>
-            <span class="now-item-sub">Shorter posts, lower bar, more often</span>
-          </li>
-        </ul>
-      </section>
+        <section class="v3-feature">
+          <span class="v3-feature-label">📚 Reading</span>
+          <div class="v3-feature-items">
+            <article class="v3-feature-item">
+              <h3>Open Socrates</h3>
+              <p class="v3-byline">Agnes Callard</p>
+              <p>A refreshing take on Socrates</p>
+            </article>
+            <article class="v3-feature-item">
+              <h3>Consciousness Explained</h3>
+              <p class="v3-byline">Daniel Dennett</p>
+              <p>Trying to wrap my head around consciousness</p>
+            </article>
+          </div>
+        </section>
 
-      <!-- THINKING ABOUT -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">🧠</span>
-          Thinking about
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">What corrigibility actually requires</span>
-            <span class="now-item-sub">Not just "off switch" — something harder</span>
-          </li>
-          <li>
-            <span class="now-item-title">How to teach a kid to sit with uncertainty</span>
-            <span class="now-item-sub">When I can barely do it myself</span>
-          </li>
-        </ul>
-      </section>
+        <section class="v3-feature">
+          <span class="v3-feature-label">🧠 Thinking about</span>
+          <div class="v3-feature-items">
+            <article class="v3-feature-item">
+              <h3>What corrigibility actually requires</h3>
+              <p>Not just "off switch" — something harder</p>
+            </article>
+            <article class="v3-feature-item">
+              <h3>How to teach a kid to sit with uncertainty</h3>
+              <p>When I can barely do it myself</p>
+            </article>
+          </div>
+        </section>
 
-      <!-- WATCHING / LISTENING -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">🎧</span>
-          Listening
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">Feel Good Radio</span>
-            <span class="now-item-sub">Apple Music</span>
-          </li>
-          <li>
-            <span class="now-item-title">Revisiting Music from teenage years</span>
-            <span class="now-item-sub">Nostalgia is a powerful drug</span>
-          </li>
-        </ul>
-      </section>
+      </div>
 
-      <!-- EATING / COOKING -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">🍳</span>
-          Cooking
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">Perfecting toddler friendly recipes</span>
-            <span class="now-item-sub">Gourmet for kids?</span>
-          </li>
-          <li>
-            <span class="now-item-title">Cheese</span>
-            <span class="now-item-sub">Exploring new variety of cheeses.</span>
-          </li>
-        </ul>
-      </section>
+      <!-- Right column: compact stacked items -->
+      <div class="v3-col-side">
 
-      <!-- LOCATION / LIFE -->
-      <section class="now-card">
-        <h2 class="now-card-title">
-          <span class="now-icon" aria-hidden="true">📍</span>
-          Life
-        </h2>
-        <ul class="now-list">
-          <li>
-            <span class="now-item-title">Dad life, full time</span>
-            <span class="now-item-sub">Every day a different distribution shift</span>
-          </li>
-          <li>
-            <span class="now-item-title">Trying to read before the phone</span>
-            <span class="now-item-sub">Batting around .300</span>
-          </li>
-        </ul>
-      </section>
+        <section class="v3-compact">
+          <span class="v3-compact-label">🔨 Building</span>
+          <ul class="v3-compact-list">
+            <li>
+              <strong>This site</strong>
+              <span>Astro + Svelte, deployed on Cloudflare Pages</span>
+            </li>
+            <li>
+              <strong>Writing more consistently</strong>
+              <span>Shorter posts, lower bar, more often</span>
+            </li>
+          </ul>
+        </section>
 
+        <section class="v3-compact">
+          <span class="v3-compact-label">🎧 Listening</span>
+          <ul class="v3-compact-list">
+            <li>
+              <strong>Feel Good Radio</strong>
+              <span>Apple Music</span>
+            </li>
+            <li>
+              <strong>Teenage years playlist</strong>
+              <span>Nostalgia is a powerful drug</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="v3-compact">
+          <span class="v3-compact-label">🍳 Cooking</span>
+          <ul class="v3-compact-list">
+            <li>
+              <strong>Toddler-friendly recipes</strong>
+              <span>Gourmet for kids?</span>
+            </li>
+            <li>
+              <strong>Cheese exploration</strong>
+              <span>Exploring new varieties</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="v3-compact">
+          <span class="v3-compact-label">📍 Life</span>
+          <ul class="v3-compact-list">
+            <li>
+              <strong>Dad life, full time</strong>
+              <span>Every day a different distribution shift</span>
+            </li>
+            <li>
+              <strong>Reading before the phone</strong>
+              <span>Batting around .300</span>
+            </li>
+          </ul>
+        </section>
+
+      </div>
     </div>
-
-    <footer class="now-footer">
-      <p>This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now page</a>. If you have one too, I'd like to read it.</p>
-    </footer>
 
   </div>
 </BaseLayout>
 
 <style>
-  .now-page {
+  .now-v3 {
     display: flex;
     flex-direction: column;
-    gap: 2.25em;
+    gap: 3em;
   }
 
-  /* ── HEADER ── */
-  .now-header {
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.75em 2em;
+  /* Header */
+  .v3-header {
+    max-width: 620px;
   }
 
-  .now-header-top {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1em;
-    flex-wrap: wrap;
-    margin-bottom: 0.6em;
+  .v3-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--secondary);
+    margin: 0 0 0.9em;
+    letter-spacing: 0.04em;
   }
 
-  .now-header h1 {
-    margin: 0;
+.v3-title {
     font-family: var(--font-sans);
-    font-size: clamp(1.8em, 4vw, 2.4em);
+    font-size: clamp(3em, 7vw, 5em);
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.05em;
+    line-height: 1.0;
     color: var(--primary);
+    margin: 0 0 0.5em;
   }
 
-  .now-updated {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: 0.78em;
-    color: var(--secondary);
-    white-space: nowrap;
-  }
-
-  .now-sub {
-    margin: 0;
+  .v3-sub {
     font-family: var(--font-serif);
-    font-size: 0.95em;
+    font-size: 1.05em;
     color: var(--secondary);
-    line-height: 1.6;
+    line-height: 1.7;
+    margin: 0;
   }
 
-  .now-sub a {
-    color: var(--link);
-    text-decoration: none;
-  }
-  .now-sub a:hover { text-decoration: underline; }
+  .v3-sub a { color: var(--link); text-decoration: none; }
+  .v3-sub a:hover { text-decoration: underline; }
 
-  /* ── GRID ── */
-  .now-grid {
+  /* Body: two-column asymmetric */
+  .v3-body {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1em;
+    grid-template-columns: 1fr 280px;
+    gap: 2.5em;
+    align-items: start;
   }
 
-  /* ── CARD ── */
-  .now-card {
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.4em 1.5em 1.5em;
-    transition: border-color 0.2s ease;
-  }
-
-  .now-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  }
-
-  .now-card-title {
+  /* Left: feature sections */
+  .v3-col-main {
     display: flex;
-    align-items: center;
-    gap: 0.5em;
-    margin: 0 0 1em;
+    flex-direction: column;
+    gap: 2.5em;
+  }
+
+  .v3-feature {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25em;
+    padding-bottom: 2.5em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .v3-feature:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .v3-feature-label {
     font-family: var(--font-sans);
-    font-size: 0.78em;
+    font-size: 0.72em;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .v3-feature-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  .v3-feature-item h3 {
+    font-family: var(--font-sans);
+    font-size: 1.15em;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0 0 0.25em;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .v3-byline {
+    font-family: var(--font-sans);
+    font-size: 0.82em;
+    color: var(--accent);
+    margin: 0 0 0.3em;
+    font-weight: 500;
+  }
+
+  .v3-feature-item p {
+    font-family: var(--font-serif);
+    font-size: 0.9em;
     color: var(--secondary);
+    margin: 0;
+    line-height: 1.6;
+    font-style: italic;
   }
 
-  .now-icon {
-    font-size: 1.2em;
+  /* Right: compact list sections */
+  .v3-col-side {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75em;
+    padding-left: 2em;
+    border-left: 1px solid var(--border);
   }
 
-  /* ── LIST ── */
-  .now-list {
+  .v3-compact-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--secondary);
+    margin-bottom: 0.75em;
+  }
+
+  .v3-compact-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.9em;
+    gap: 0.75em;
   }
 
-  .now-list li {
+  .v3-compact-list li {
     display: flex;
     flex-direction: column;
-    gap: 0.15em;
-    padding-left: 0.85em;
-    border-left: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    gap: 0.1em;
   }
 
-  .now-item-title {
+  .v3-compact-list strong {
     font-family: var(--font-sans);
-    font-size: 0.9em;
+    font-size: 0.88em;
     font-weight: 600;
     color: var(--primary);
-    line-height: 1.3;
   }
 
-  .now-item-sub {
+  .v3-compact-list span {
     font-family: var(--font-serif);
-    font-size: 0.82em;
+    font-size: 0.8em;
     color: var(--secondary);
     font-style: italic;
-    line-height: 1.45;
+    line-height: 1.4;
   }
 
-  /* ── FOOTER ── */
-  .now-footer {
-    text-align: center;
-    font-family: var(--font-sans);
-    font-size: 0.82em;
-    color: var(--secondary);
-  }
-
-  .now-footer a {
-    color: var(--link);
-    text-decoration: none;
-  }
-  .now-footer a:hover { text-decoration: underline; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 560px) {
-    .now-grid {
+  @media (max-width: 700px) {
+    .v3-body {
       grid-template-columns: 1fr;
     }
 
-    .now-header {
-      padding: 1.4em 1.25em;
+    .v3-col-side {
+      padding-left: 0;
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding-top: 2em;
+    }
+
+    .v3-title {
+      font-size: clamp(2.5em, 10vw, 3em);
     }
   }
 </style>
