@@ -14,8 +14,6 @@ import CalloutBox from '../../components/CalloutBox.svelte';
 import PullQuote from '../../components/PullQuote.svelte';
 import DefinitionBlock from '../../components/DefinitionBlock.svelte';
 
-## Introduction
-
 Before I ran this experiment, I expected brandy to be the weird one — the BBC deep-dish recipe soaks sultanas in brandy, and I figured both would land far from everything else. They didn't land together. In ingredient embedding space, brandy migrates toward pastry and structure, while sultanas drift toward the spice and aromatic cluster. Neither landed where I'd have put them. That result says something true about how language works, and it's what this post is about.
 
 I pulled twelve apple pie recipes from Food52, Bon Appétit, BBC Good Food, and AllRecipes, extracted their ingredients, embedded them locally with a BERT-family model, and projected to 2D with UMAP. The question: what clusters? Most of it is exactly what you'd expect. One thing isn't.
