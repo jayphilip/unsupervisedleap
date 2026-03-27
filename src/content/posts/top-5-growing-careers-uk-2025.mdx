@@ -1,0 +1,110 @@
+---
+title: "2026 Trends: One Country Is Hiring in Crisis. The Other Is Hiring for Upside."
+date: 2026-03-27
+draft: false
+tags: ["careers", "uk labour market", "us jobs", "jobs", "data", "hiring"]
+categories: ["Work"]
+description: "The UK and US Indeed lists aren't designed to be compared. That turns out to be the most interesting thing about them."
+showToc: true
+---
+
+import StatBar from '../../components/StatBar.svelte';
+import CalloutBox from '../../components/CalloutBox.svelte';
+import PullQuote from '../../components/PullQuote.svelte';
+
+Indeed publishes annual hiring data for both the UK and US. I went looking for a clean comparison. What I found instead is that the two lists aren't measuring the same thing. The reason they aren't is worth paying attention to.
+
+The UK list asks: which job titles saw the biggest surge in postings this year? It is a single metric. Year-over-year posting growth, with a salary floor to filter out noise. Rank by that number, publish the table.
+
+The US list asks something more elaborate: which jobs are genuinely good right now, accounting for pay, wage growth, posting volume, demand trajectory, and remote availability? It is a five-factor composite score, published with a methodology page, built by the Hiring Lab research team.
+
+<CalloutBox type="note" title="The methodology gap">
+The UK "Best Jobs" list ([uk.indeed.com](https://uk.indeed.com/career-advice/finding-a-job/best-jobs-2025)) ranks solely by **year-over-year posting growth** with a salary floor. No composite score, no wage growth component, no methodology page. The US "Best Jobs" list ([Indeed Hiring Lab](https://www.hiringlab.org/2026/01/13/best-jobs-methodology/)) uses a **weighted composite**: median pay (30%), 3-year pay growth (20%), posting volume (20%), 3-year posting growth (20%), remote availability (10%). Different publishers within Indeed, different time horizons, different questions. A direct comparison of the numbers would be misleading, so this post won't make one.
+</CalloutBox>
+
+What you can do is read each list on its own terms. And when you do that, they say very different things.
+
+---
+
+## The UK list is a distress signal
+
+<StatBar
+  client:load
+  title="Year-over-year posting growth — Indeed UK Best Jobs 2025"
+  unit="%"
+  globalMax={260}
+  items={[
+    { label: "School Teacher",      value: 245, note: "£39,356 avg. salary" },
+    { label: "Property Solicitor",  value: 111, note: "£52,929 avg. salary" },
+    { label: "Commercial Director", value: 108, note: "£81,802 avg. salary" },
+    { label: "Paediatrician",       value: 91,  note: "£106,048 avg. salary" },
+    { label: "AI/ML Engineer",      value: 86,  note: "£68,560 avg. salary" },
+  ]}
+/>
+
+The UK list measures urgency. A role climbs it not because it is a good career bet but because employers cannot fill it fast enough. That is a useful signal. It tells you about employer pain, not opportunity.
+
+**School Teacher (+245%)** is the number that stops you. Secondary initial teacher training recently hit half its recruitment target. Between 2021/22 and 2022/23, 44% more teachers reported actively considering leaving. Schools are posting at volume because the pipeline is draining, not because the profession is flourishing. The average advertised salary is £39,356. That gap between what the job demands and what it pays is part of why the pipeline is draining.
+
+**Property Solicitor (+111%)** reflects a housing market that kept generating legal complexity even as transaction volumes fell. Disputes, conveyancing backlogs, commercial property restructuring. Employment solicitors (93%) sit just outside the top five for similar reasons: the post-pandemic workplace became significantly more litigious.
+
+**Commercial Director (+108%)** is the outlier. Senior commercial leadership growing fast in a cautious market reads less like expansion and more like churn. Businesses under pressure cycling through the people accountable for revenue.
+
+**Paediatrician (+91%)** is the NHS pattern, recurring. Medical roles appear in this list with the consistency of a structural problem. The money is there (£106,048 average). The pipeline is not.
+
+**AI/ML Engineer (+86%)** is the one people expected to top the list. It didn't. The UK leads peer economies in AI-related posting share, with 5.6% of all postings referencing AI tools, but the fastest-growing role in the country is still a teacher.
+
+The UK list, read honestly, is a roster of institutions under pressure. Three of the top five are public sector or heavily regulated services. The list doesn't reveal where the economy is going. It reveals where it is struggling to hold.
+
+---
+
+## The US list is shopping for upside
+
+<StatBar
+  client:load
+  title="Indeed US Best Jobs 2026 — composite rank (posting growth shown)"
+  unit="%"
+  globalMax={120}
+  items={[
+    { label: "Cardiac Med. Tech.",     value: 34,  note: "$133,907 median | posting growth +34%, wage growth +34%" },
+    { label: "Owner-Op. Truck Driver", value: 39,  note: "$160,000 median | posting growth +39%" },
+    { label: "Nurse Practitioner",     value: -2,  note: "$143,183 median | wage growth +10%" },
+    { label: "Civil Engineer",         value: 104, note: "$100,872 median | posting growth +104%" },
+    { label: "LPC Counselor",          value: -17, note: "$107,812 median | wage growth +33%" },
+    { label: "Data Scientist (#10)",   value: 15,  note: "$115,079 median | only tech role in top 10" },
+  ]}
+/>
+
+The US list measures something different: where are pay, growth, and demand all pointing in the same direction? A role can rank highly here even with declining postings if wages are climbing fast enough. That is a more sophisticated question, and a fundamentally different one.
+
+**Cardiac Medical Technician (#1)** has posting growth and wage growth both at +34% over three years. When both lines move at the same rate, it is structural demand, not temporary noise. Healthcare absorbed 47% of all US job growth in 2025. One sector, nearly half the total.
+
+**Owner-Operator Truck Driver (#2, $160K median)** is the surprise. Posting growth of 39%, the highest median salary in the top five. Persistent driver shortages and a freight economy that rewards independence have made the model increasingly attractive. They bear their own costs but keep more of the revenue. Not glamorous. Honest.
+
+**Nurse Practitioner (#3)** has essentially flat posting growth (-2%), but wages up 10% pushed it near the top. Employers are competing on salary rather than advertising volume. Supply is quietly shrinking relative to demand.
+
+**Civil Engineer (#4, +104%)** is the sharpest posting growth in the US top five. Federal infrastructure legislation created durable demand still working its way through hiring. Large programmes take years to staff up. This one has runway.
+
+**Licensed Professional Counselor (#5)** is the most telling entry. Postings are down 17%. Wages are up 33%. Fewer employers are advertising the role than three years ago, but those who are advertising it are paying significantly more. Mental health demand has not slowed. The licensed therapist pipeline has not kept pace.
+
+**Data Scientist (#10, shown for reference)** is the only technology role in the entire US top ten. Tech hiring on Indeed remains roughly 30% below pre-pandemic levels. Data Scientist survived. The sector around it did not.
+
+---
+
+## The lists agree on one thing
+
+<PullQuote
+  quote="The UK list is a fire alarm. The US list is a ratings guide. They are not measuring the same emergency."
+/>
+
+The UK list is built to surface urgency. The US list is built to surface value. Neither is wrong. They are answering different questions for different audiences.
+
+But reading them together reveals something consistent underneath the methodological noise: the roles that keep appearing in both countries are the ones that require a body in a specific place, credentials that take years to earn, and skills that cannot be replicated at scale. Healthcare. Law. Engineering. Trades. The AI story is real and growing. But it is still a supporting character in both datasets, not the lead.
+
+The more striking difference is what the UK list reveals by omission. The US composite rewards roles where wages are rising to meet demand. The UK list has no wage growth component at all, and if it did, teaching and paediatrics might look different. A role where postings are up 245% but pay has barely moved is not an opportunity. It is a symptom.
+
+That is not a data point the UK list is designed to show you. The fact that it shows up anyway is the thing worth sitting with.
+
+---
+
+*Data sourced from Indeed. UK Best Jobs 2025: [uk.indeed.com](https://uk.indeed.com/career-advice/finding-a-job/best-jobs-2025). US Best Jobs 2026: [indeed.com](https://www.indeed.com/career-advice/news/best-jobs-2026), methodology at [Indeed Hiring Lab](https://www.hiringlab.org/2026/01/13/best-jobs-methodology/). Broader market context: [Indeed Hiring Lab UK 2026 Trends Report](https://www.hiringlab.org/uk/blog/2025/12/09/indeed-2026-uk-jobs-hiring-trends-report/) and [Indeed Hiring Lab US 2026 Trends Report](https://www.hiringlab.org/2025/11/20/indeed-2026-us-jobs-hiring-trends-report/).*

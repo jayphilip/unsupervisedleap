@@ -41,24 +41,25 @@
   }
 
   .pull-quote-mark {
-    display: block;
+    position: absolute;
+    top: -0.1em;
+    left: 0;
     font-family: var(--font-serif);
     font-size: 5em;
-    line-height: 0.6;
+    line-height: 1;
     color: var(--accent);
     opacity: 0.35;
-    margin-bottom: 0.15em;
     user-select: none;
+  }
+
+  .align-left {
+    padding-top: 1.1em;
   }
 
   /* Centered: pull the mark out of flow so it doesn't push text down */
   .align-center .pull-quote-mark {
-    position: absolute;
-    top: -0.25em;
     left: 50%;
     transform: translateX(-50%);
-    margin: 0;
-    line-height: 1;
   }
 
   .align-center {
